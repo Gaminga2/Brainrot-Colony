@@ -1,0 +1,84 @@
+# 🛠️ ROBLOX & AI DEVELOPER COMMAND CHEATSHEET
+
+Welcome! Here is a beginner-friendly reference guide covering essential commands for **AI Assistant**, **Rojo**, **Rokit**, **Git**, and your **Windows Terminal**.
+
+---
+
+## 🤖 1. AI Assistant & Slash Commands
+
+Use these special slash commands directly in your chat prompt window to control the AI assistant:
+
+| Slash Command | What It Does & When to Use It |
+| :--- | :--- |
+| **`/goal`** | **Long-Running Autonomous Task**: Tells the AI to work continuously and thoroughly on a large goal (e.g. building a full system) without stopping for small questions. |
+| **`/grill-me`** | **Interactive Q&A Plan**: Starts an interview session where the AI asks you design questions to align on choices before writing code. |
+| **`/schedule`** | **Timer & Reminders**: Schedules a one-time timer or recurring reminder for long build/deploy tasks. |
+| **`/learn`** | **Save Custom Rules**: Teaches the AI a specific project rule or coding preference to remember forever. |
+
+### 💡 Pro-Tips for Prompting
+* **Mention Specific Files**: Use full relative paths (e.g., *"Update `src/client/Controllers/PlacementController.luau`"*).
+* **Reference Specifications**: Use tracking files like `v0.0.1_brainrot_castle_story_spec.md` to keep complex features organized.
+
+---
+
+## 🔴 2. Rojo Commands (Roblox Sync Tool)
+
+Rojo syncs code from your computer (`src/`) directly into your open Roblox Studio session live.
+
+| Command | What It Does |
+| :--- | :--- |
+| `rojo serve` | **Most Important!** Starts the live sync server. Open Roblox Studio -> Plugins -> Rojo -> Connect. |
+| `rojo build -o Game.rbxl` | Compiles your local code and `default.project.json` into a single standalone `.rbxl` file. |
+| `rojo plugin install` | Installs the Rojo plugin into your Roblox Studio plugins folder automatically. |
+| `rojo init` | Initializes a new project with a default `default.project.json` file. |
+
+---
+
+## 🚀 3. Rokit Commands (Developer Toolchain Manager)
+
+Rokit automatically installs and manages CLI tools like Rojo, Selene, or StyLua for your project.
+
+| Command | What It Does |
+| :--- | :--- |
+| `rokit install` | Downloads & installs all developer tools listed in `rokit.toml`. |
+| `rokit update` | Checks for and updates your local development tools to the latest versions. |
+
+---
+
+## 🌿 4. Git Commands (Saving & Version Control)
+
+Git saves snapshots ("commits") of your project so you never lose work and can undo mistakes easily.
+
+| Command | What It Does | Quick Example |
+| :--- | :--- | :--- |
+| `git status` | Checks which files have been modified, created, or deleted. | `git status` |
+| `git add .` | Stages ALL modified and new files to get ready to save. | `git add .` |
+| `git commit -m "message"` | Saves a snapshot of staged changes with a descriptive summary. | `git commit -m "Added v0.0.1 minion AI"` |
+| `git push` | Uploads your local saved snapshots to GitHub. | `git push origin main` |
+| `git pull` | Downloads the latest code changes from GitHub to your computer. | `git pull` |
+| `git log --oneline` | Displays a clean 1-line list of your past saved commits. | `git log -n 5` |
+| `git checkout -b <name>` | Creates and switches to a new isolated branch for safe testing. | `git checkout -b feature/pvp-mode` |
+
+---
+
+## 💻 5. Terminal Commands (PowerShell / Command Prompt)
+
+Basic commands for navigating folders and managing processes in Windows:
+
+| Command | What It Does | Quick Example |
+| :--- | :--- | :--- |
+| `ls` or `dir` | Lists all files and subfolders in your current folder. | `ls` |
+| `cd <folder>` | Changes your working directory into a folder. | `cd src/server` |
+| `cd ..` | Moves up one parent folder level. | `cd ..` |
+| `cls` or `clear` | Clears all text clutter from your terminal screen. | `cls` |
+| `Ctrl + C` | Stops/kills a running terminal process (like stopping `rojo serve`). | Press `Ctrl + C` in terminal |
+| `Get-Process` | Shows running background processes on Windows. | `Get-Process rojo` |
+
+---
+
+## ⚡ Quick Daily Workflow Summary
+
+1. Open Terminal in your project root (`c:\Users\gamin\Downloads\Roblox`).
+2. Run `rojo serve` to connect local files to Roblox Studio.
+3. Ask your AI Assistant to write features or fix bugs.
+4. Save your progress: `git add .` -> `git commit -m "Feature complete!"`.
