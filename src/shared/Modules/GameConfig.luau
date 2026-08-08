@@ -2,8 +2,10 @@
 local GameConfig = {}
 
 -- Voxel Snap Grid Configuration
-GameConfig.GRID_SIZE = 4 -- 4x4x4 studs per voxel block
-GameConfig.MAX_BUILD_HEIGHT = 120 -- max height in studs
+-- Standard Roblox avatar is ~5.0 - 5.5 studs tall.
+-- 1 block = 2 x 2 x 2 studs (3 blocks stacked = 6 studs = ~1 NPC height).
+GameConfig.GRID_SIZE = 2 -- 2x2x2 studs per voxel block
+GameConfig.MAX_BUILD_HEIGHT = 150 -- max height in studs
 
 -- Resources
 GameConfig.Resources = {
@@ -12,35 +14,35 @@ GameConfig.Resources = {
 	RizziteAlloy = { Name = "Rizzite Alloy", Color = Color3.fromRGB(0, 200, 255) },
 }
 
--- Block Types & Health
+-- Block Types & Health (Balanced for 2-stud grid units)
 GameConfig.Blocks = {
 	WoodWall = {
-		Name = "Wood Wall",
+		Name = "Wood Block",
 		Material = Enum.Material.Wood,
 		Color = Color3.fromRGB(150, 95, 45),
-		MaxHP = 100,
-		Cost = { OhioWood = 5 },
+		MaxHP = 50,
+		Cost = { OhioWood = 2 },
 	},
 	StoneWall = {
-		Name = "Stone Wall",
+		Name = "Stone Block",
 		Material = Enum.Material.Cobblestone,
 		Color = Color3.fromRGB(110, 110, 115),
-		MaxHP = 300,
-		Cost = { GyattGranite = 8 },
+		MaxHP = 150,
+		Cost = { GyattGranite = 3 },
 	},
 	RizziteReinforcedWall = {
-		Name = "Rizzite Shield Wall",
+		Name = "Rizzite Shield Block",
 		Material = Enum.Material.Neon,
 		Color = Color3.fromRGB(0, 220, 255),
-		MaxHP = 750,
-		Cost = { GyattGranite = 10, RizziteAlloy = 5 },
+		MaxHP = 350,
+		Cost = { GyattGranite = 4, RizziteAlloy = 2 },
 	},
 	SpikeTrap = {
 		Name = "Spike Trap",
 		Material = Enum.Material.Metal,
 		Color = Color3.fromRGB(60, 60, 60),
-		MaxHP = 150,
-		Cost = { OhioWood = 3, GyattGranite = 4 },
+		MaxHP = 80,
+		Cost = { OhioWood = 1, GyattGranite = 2 },
 		Damage = 25,
 	},
 }
