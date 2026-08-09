@@ -3,9 +3,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer:WaitForChild("PlayerGui") :: PlayerGui
-
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
 
@@ -79,16 +76,27 @@ local Categories = {
 }
 
 function TopNavigationMenu.init()
+	local LocalPlayer = Players.LocalPlayer
+	if not LocalPlayer then
+		LocalPlayer = Players:GetPropertyChangedSignal("LocalPlayer"):Wait() :: any
+	end
+	local playerGui = LocalPlayer:WaitForChild("PlayerGui", 10) :: PlayerGui?
+	if not playerGui then
+		warn("[TopNavigationMenu] PlayerGui not found!")
+		return
+	end
+
 	local screenGui = Instance.new("ScreenGui")
 	screenGui.Name = "TopNavigationGui"
 	screenGui.ResetOnSpawn = false
-	screenGui.DisplayOrder = 10
+	screenGui.DisplayOrder = 100
+	screenGui.IgnoreGuiInset = true
 
 	-- Top Bar Container (Centered at top)
 	local topBar = Instance.new("Frame")
 	topBar.Name = "TopNavFrame"
 	topBar.Size = UDim2.new(0, 680, 0, 48)
-	topBar.Position = UDim2.new(0.5, -340, 0, 15)
+	topBar.Position = UDim2.new(0.5, -340, 0, 40)
 	topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
 	topBar.BackgroundTransparency = 0.35 -- Semi-transparent glass background
 	topBar.BorderSizePixel = 0
@@ -118,7 +126,7 @@ function TopNavigationMenu.init()
 	drawerFrame = Instance.new("Frame")
 	drawerFrame.Name = "CategoryDrawer"
 	drawerFrame.Size = UDim2.new(0, 640, 0, 0)
-	drawerFrame.Position = UDim2.new(0.5, -320, 0, 70)
+	drawerFrame.Position = UDim2.new(0.5, -320, 0, 95)
 	drawerFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
 	drawerFrame.BackgroundTransparency = 0.3
 	drawerFrame.ClipsDescendants = true
@@ -189,7 +197,7 @@ function TopNavigationMenu.init()
 		end)
 	end
 
-	screenGui.Parent = PlayerGui
+	screenGui.Parent = playerGui
 	print("[TopNavigationMenu] Loaded top glassmorphic menu bar!")
 end
 
