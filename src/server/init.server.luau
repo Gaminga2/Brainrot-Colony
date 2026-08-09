@@ -71,15 +71,22 @@ spawnMinionRemote.OnServerInvoke = function(player: Player, minionClass: string,
 	return false
 end
 
--- Player Joined Setup: Give Starter Brainrot Minion
+-- Player Joined Setup: Teleport to Island Surface SpawnLocation & Give Starter Brainrot Minion
 Players.PlayerAdded:Connect(function(player)
 	player.CharacterAdded:Connect(function(character)
-		task.wait(2)
-		local hrp = character:WaitForChild("HumanoidRootPart", 5) :: Part
+		task.wait(0.2)
+		local hrp = character:WaitForChild("HumanoidRootPart", 5) :: Part?
+		local spawnLoc = Workspace:FindFirstChild("IslandSpawnLocation") :: SpawnLocation?
+
+		if hrp and spawnLoc then
+			character:PivotTo(spawnLoc.CFrame + Vector3.new(0, 3, 0))
+		end
+
+		task.wait(1.5)
 		if hrp then
 			-- Spawn starter Mewing Mason
 			MinionAIService.spawnMinion(player, "MewingMason", hrp.Position + Vector3.new(3, 0, 3), "Gigachad")
-			print("[Server] Spawned starter Mewing Mason for", player.Name)
+			print("[Server] Teleported %s to Island Spawn and spawned Mewing Mason!", player.Name)
 		end
 	end)
 end)

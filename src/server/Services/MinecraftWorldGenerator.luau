@@ -7,6 +7,29 @@ local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConf
 
 local MinecraftWorldGenerator = {}
 
+local function setupIslandSpawnLocation(baseSurfaceY: number, hillHeight: number, noiseScale: number, seed: number)
+	local centerNoise = math.noise(0, 0, seed)
+	local centerSurfaceY = math.floor(baseSurfaceY + (centerNoise * hillHeight))
+
+	local spawnLocation = Workspace:FindFirstChild("IslandSpawnLocation") :: SpawnLocation?
+	if not spawnLocation then
+		spawnLocation = Instance.new("SpawnLocation")
+		spawnLocation.Name = "IslandSpawnLocation"
+		spawnLocation.Size = Vector3.new(12, 1, 12)
+		spawnLocation.Anchored = true
+		spawnLocation.CanCollide = true
+		spawnLocation.Neutral = true
+		spawnLocation.Duration = 0
+		spawnLocation.Material = Enum.Material.SmoothPlastic
+		spawnLocation.Color = Color3.fromRGB(100, 185, 75)
+		spawnLocation.Transparency = 0.6
+		spawnLocation.Parent = Workspace
+	end
+
+	spawnLocation.CFrame = CFrame.new(0, centerSurfaceY + 2, 0)
+	print(string.format("[MinecraftWorldGenerator] Positioned IslandSpawnLocation on top surface at Y = %d", centerSurfaceY + 2))
+end
+
 function MinecraftWorldGenerator.generateWorld()
 	local terrain = Workspace.Terrain
 	if not terrain then
@@ -15,18 +38,18 @@ function MinecraftWorldGenerator.generateWorld()
 	end
 
 	local cfg = GameConfig.TerrainConfig or {
-		WORLD_SIZE_STUDS = 160,
+		WORLD_SIZE_STUDS = 320,
 		STEP_STUDS = 4,
 		BASE_SURFACE_Y = 12,
 		HILL_HEIGHT = 18,
-		NOISE_SCALE = 0.02,
+		NOISE_SCALE = 0.015,
 		SEED = 777,
 	}
 
 	-- Clear old terrain if re-generating
 	terrain:Clear()
 
-	print("[MinecraftWorldGenerator] Generating smooth Minecraft-style voxel world...")
+	print("[MinecraftWorldGenerator] Generating 2x smooth Minecraft-style voxel world (320 studs)...")
 	local halfSize = cfg.WORLD_SIZE_STUDS / 2
 	local step = cfg.STEP_STUDS
 	local noiseScale = cfg.NOISE_SCALE
@@ -63,7 +86,10 @@ function MinecraftWorldGenerator.generateWorld()
 		end
 	end
 
-	print("[MinecraftWorldGenerator] Minecraft-style Smooth Terrain world generation complete!")
+	-- Create / position central top surface SpawnLocation
+	setupIslandSpawnLocation(baseSurfaceY, hillHeight, noiseScale, seed)
+
+	print("[MinecraftWorldGenerator] 2x Minecraft-style Smooth Terrain world & spawn setup complete!")
 end
 
 function MinecraftWorldGenerator.init()
