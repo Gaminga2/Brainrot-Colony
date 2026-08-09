@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
-local Services = script.Parent:WaitForChild("Services")
+local Services = script:WaitForChild("Services")
 
 local BuildingService = require(Services:WaitForChild("BuildingService"))
 local MinionAIService = require(Services:WaitForChild("MinionAIService"))

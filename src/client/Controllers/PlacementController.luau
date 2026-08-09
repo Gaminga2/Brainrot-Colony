@@ -23,7 +23,7 @@ function PlacementController.init()
 	ghostPart.Size = Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
 	ghostPart.Anchored = true
 	ghostPart.CanCollide = false
-	ghostPart.Material = Enum.Material.Forcefield
+	ghostPart.Material = Enum.Material.ForceField
 	ghostPart.Color = Color3.fromRGB(0, 255, 120)
 	ghostPart.Transparency = 0.5
 	ghostPart.Parent = nil
