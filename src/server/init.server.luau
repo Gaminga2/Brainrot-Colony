@@ -8,13 +8,15 @@ local Services = script:WaitForChild("Services")
 local BuildingService = require(Services:WaitForChild("BuildingService"))
 local MinionAIService = require(Services:WaitForChild("MinionAIService"))
 local GameModeManager = require(Services:WaitForChild("GameModeManager"))
+local VoxelTerrainGenerator = require(Services:WaitForChild("VoxelTerrainGenerator"))
 
-print("[Server] Initializing Project Brainrot Castle (v0.0.1)...")
+print("[Server] Initializing Project Brainrot Castle (v0.0.23)...")
 
 -- Initialize Services
 BuildingService.init()
 MinionAIService.init()
 GameModeManager.init()
+VoxelTerrainGenerator.init()
 
 -- Create Remote Events & Functions for Client/Server Communication
 local placeBlockRemote = ReplicatedStorage:FindFirstChild("PlaceBlockRequest") :: RemoteFunction

@@ -3,7 +3,7 @@ local GameConfig = {}
 
 -- Project Metadata
 GameConfig.PROJECT_NAME = "Brainrot Castle (Brainrot Colony)"
-GameConfig.VERSION = "v0.0.22"
+GameConfig.VERSION = "v0.0.23"
 
 -- Voxel Snap Grid Configuration (2x2x2 studs = ~1/3 Roblox NPC height)
 GameConfig.GRID_SIZE = 2
@@ -20,6 +20,25 @@ GameConfig.Resources = {
 
 -- Basic Building Blocks Registry (Cute Soft Block Palette)
 GameConfig.Blocks = {
+	-- 🌿 Natural Terrain Voxel Blocks
+	GrassBlock1x1 = {
+		Name = "Grass Block",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Grass,
+		Color = Color3.fromRGB(100, 185, 75),
+		MaxHP = 40,
+		Cost = { SkibidiClay = 1 },
+	},
+	DirtBlock1x1 = {
+		Name = "Dirt Block",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Dirt,
+		Color = Color3.fromRGB(135, 90, 50),
+		MaxHP = 30,
+		Cost = { SkibidiClay = 1 },
+	},
 	-- 🪵 Ohio Wood Series (Soft Caramel Timber)
 	WoodCube1x1 = {
 		Name = "Wood 1x1 Cube",

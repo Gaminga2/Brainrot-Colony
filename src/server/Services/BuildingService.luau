@@ -89,6 +89,10 @@ function BuildingService.damageBlock(position: Vector3, damageAmount: number)
 	end
 end
 
+function BuildingService.registerGeneratedBlock(part: BasePart, key: string)
+	placedBlocks[key] = part
+end
+
 function BuildingService.getPlacedBlocks()
 	return placedBlocks
 end

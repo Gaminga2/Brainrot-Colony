@@ -3,6 +3,10 @@ local CraftingRecipes = {}
 
 -- Recipe Master Registry
 CraftingRecipes.Recipes = {
+	-- Terrain Blocks
+	GrassBlock1x1 = { { Resource = "SkibidiClay", Amount = 1 } },
+	DirtBlock1x1 = { { Resource = "SkibidiClay", Amount = 1 } },
+
 	-- Blocks
 	WoodCube1x1 = { { Resource = "OhioWood", Amount = 2 } },
 	WoodBeam1x2 = { { Resource = "OhioWood", Amount = 4 } },
