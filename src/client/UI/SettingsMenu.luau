@@ -296,48 +296,54 @@ function SettingsMenu.renderCategoryContent(categoryId: string)
 		end
 
 	elseif categoryId == "GridSettings" then
-		-- Render Grid Smoothness Toggle
-		local row = Instance.new("Frame")
-		row.Size = UDim2.new(1, 0, 0, 36)
-		row.BackgroundColor3 = Color3.fromRGB(28, 28, 40)
-		row.BackgroundTransparency = 0.4
-		row.Parent = rightContentFrame
+		local toggles = {
+			{ Key = "SmoothGridSnapping", Name = "Smooth Grid Lerp" },
+			{ Key = "GhostMode", Name = "Ghost Mode (Noclip Player)" },
+		}
 
-		local rCorner = Instance.new("UICorner")
-		rCorner.CornerRadius = UDim.new(0, 6)
-		rCorner.Parent = row
+		for _, tog in ipairs(toggles) do
+			local row = Instance.new("Frame")
+			row.Size = UDim2.new(1, 0, 0, 36)
+			row.BackgroundColor3 = Color3.fromRGB(28, 28, 40)
+			row.BackgroundTransparency = 0.4
+			row.Parent = rightContentFrame
 
-		local label = Instance.new("TextLabel")
-		label.Text = "Smooth Grid Lerp"
-		label.Font = Enum.Font.SourceSansBold
-		label.TextSize = 13
-		label.TextColor3 = Color3.fromRGB(240, 240, 255)
-		label.Size = UDim2.new(0.6, 0, 1, 0)
-		label.Position = UDim2.new(0, 10, 0, 0)
-		label.TextXAlignment = Enum.TextXAlignment.Left
-		label.BackgroundTransparency = 1
-		label.Parent = row
+			local rCorner = Instance.new("UICorner")
+			rCorner.CornerRadius = UDim.new(0, 6)
+			rCorner.Parent = row
 
-		local isON = GameSettings.get("SmoothGridSnapping") == true
-		local toggleBtn = Instance.new("TextButton")
-		toggleBtn.Text = isON and "ON" or "OFF"
-		toggleBtn.Font = Enum.Font.SourceSansBold
-		toggleBtn.TextSize = 11
-		toggleBtn.TextColor3 = isON and Color3.fromRGB(0, 255, 180) or Color3.fromRGB(200, 200, 220)
-		toggleBtn.Size = UDim2.new(0, 60, 0, 24)
-		toggleBtn.Position = UDim2.new(1, -68, 0, 6)
-		toggleBtn.BackgroundColor3 = isON and Color3.fromRGB(40, 90, 60) or Color3.fromRGB(50, 40, 40)
-		toggleBtn.Parent = row
+			local label = Instance.new("TextLabel")
+			label.Text = tog.Name
+			label.Font = Enum.Font.SourceSansBold
+			label.TextSize = 13
+			label.TextColor3 = Color3.fromRGB(240, 240, 255)
+			label.Size = UDim2.new(0.65, 0, 1, 0)
+			label.Position = UDim2.new(0, 10, 0, 0)
+			label.TextXAlignment = Enum.TextXAlignment.Left
+			label.BackgroundTransparency = 1
+			label.Parent = row
 
-		local btnCorner = Instance.new("UICorner")
-		btnCorner.CornerRadius = UDim.new(0, 5)
-		btnCorner.Parent = toggleBtn
+			local isON = GameSettings.get(tog.Key) == true
+			local toggleBtn = Instance.new("TextButton")
+			toggleBtn.Text = isON and "ON" or "OFF"
+			toggleBtn.Font = Enum.Font.SourceSansBold
+			toggleBtn.TextSize = 11
+			toggleBtn.TextColor3 = isON and Color3.fromRGB(0, 255, 180) or Color3.fromRGB(200, 200, 220)
+			toggleBtn.Size = UDim2.new(0, 60, 0, 24)
+			toggleBtn.Position = UDim2.new(1, -68, 0, 6)
+			toggleBtn.BackgroundColor3 = isON and Color3.fromRGB(40, 90, 60) or Color3.fromRGB(50, 40, 40)
+			toggleBtn.Parent = row
 
-		toggleBtn.MouseButton1Click:Connect(function()
-			local newState = not GameSettings.get("SmoothGridSnapping")
-			GameSettings.set("SmoothGridSnapping", newState)
-			SettingsMenu.renderCategoryContent("GridSettings")
-		end)
+			local btnCorner = Instance.new("UICorner")
+			btnCorner.CornerRadius = UDim.new(0, 5)
+			btnCorner.Parent = toggleBtn
+
+			toggleBtn.MouseButton1Click:Connect(function()
+				local newState = not GameSettings.get(tog.Key)
+				GameSettings.set(tog.Key, newState)
+				SettingsMenu.renderCategoryContent("GridSettings")
+			end)
+		end
 
 	elseif categoryId == "AudioVisuals" then
 		-- Render Audio Toggles

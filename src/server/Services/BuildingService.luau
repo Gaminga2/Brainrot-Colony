@@ -49,6 +49,7 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 	part.Size = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
 	part.Position = snappedPos
 	part.Anchored = true
+	part.CanCollide = true
 	part.Material = blockData.Material
 	part.Color = blockData.Color
 	part:SetAttribute("BlockType", blockType)

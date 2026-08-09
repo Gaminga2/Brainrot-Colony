@@ -6,6 +6,7 @@ GameSettings.Data = {
 	ActiveMode = "Survival",       -- Survival, PvP, Creative
 	InfiniteResources = false,    -- Free building bypass
 	GodMode = false,              -- Invincibility
+	GhostMode = false,            -- Ghost noclip player character (ON/OFF toggle)
 	SmoothGridSnapping = true,   -- Smooth lerped ghost movement
 	GridLerpSpeed = 0.35,         -- Lerp factor (0.1 = super soft, 1.0 = instant)
 	MewingSFX = true,             -- Brainrot voicelines & SFX

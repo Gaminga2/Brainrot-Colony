@@ -30,6 +30,7 @@
 | Setting Name | Options / Values | Description |
 | :--- | :--- | :--- |
 | **Smooth Grid Lerp** | `Enabled` / `Disabled` | Smoothly interpolates ghost placement box instead of instant jerky snapping. |
+| **Ghost Mode (Noclip)** | `OFF` (Toggle ON in Settings) | Turns player into non-colliding noclip avatar to walk through placed structures freely during testing. |
 | **Grid Snap Resolution** | `2 studs` | Standard 1/3 NPC scale voxel snap unit. |
 | **Ghost Visibility** | `40% Transparency` | Semi-transparent preview box. |
 

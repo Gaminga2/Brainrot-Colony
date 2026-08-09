@@ -1,29 +1,28 @@
 --!strict
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
+
+local Shared = ReplicatedStorage:WaitForChild("Shared")
+local GameSettings = require(Shared:WaitForChild("Modules"):WaitForChild("GameSettings"))
+
 local GhostPlayerController = {}
 
-local function applyGhostPhysics(character: Model)
-	task.wait(0.1)
-	for _, child in ipairs(character:GetDescendants()) do
-		if child:IsA("BasePart") then
-			-- Disable collision so player walks through blocks and structure without bugging physics
-			child.CanCollide = false
-			-- Apply ghost transparency effect
-			if child.Name ~= "HumanoidRootPart" then
-				child.Transparency = 0.35
-			end
-		end
-	end
-
-	-- Continuous enforcement loop to prevent physics engine from re-enabling collision
+local function applyCharacterPhysics(character: Model)
 	RunService.Stepped:Connect(function()
-		if character and character.Parent then
-			for _, child in ipairs(character:GetChildren()) do
-				if child:IsA("BasePart") and child.Name ~= "HumanoidRootPart" then
+		if not character or not character.Parent then return end
+
+		local isGhostMode = GameSettings.get("GhostMode") == true
+		for _, child in ipairs(character:GetChildren()) do
+			if child:IsA("BasePart") and child.Name ~= "HumanoidRootPart" then
+				if isGhostMode then
 					child.CanCollide = false
+					child.Transparency = 0.35
+				else
+					child.CanCollide = true
+					child.Transparency = 0
 				end
 			end
 		end
@@ -32,14 +31,14 @@ end
 
 function GhostPlayerController.init()
 	if LocalPlayer.Character then
-		applyGhostPhysics(LocalPlayer.Character)
+		applyCharacterPhysics(LocalPlayer.Character)
 	end
 
 	LocalPlayer.CharacterAdded:Connect(function(character)
-		applyGhostPhysics(character)
+		applyCharacterPhysics(character)
 	end)
 
-	print("[GhostPlayerController] Ghost Commander physics initialized!")
+	print("[GhostPlayerController] Ghost Mode toggle controller initialized!")
 end
 
 return GhostPlayerController
