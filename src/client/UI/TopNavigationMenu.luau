@@ -91,11 +91,6 @@ local Categories = {
 			{ ID = "PetFollower", Name = "Mini Sigma Pet" },
 		},
 	},
-	{
-		ID = "Settings",
-		Name = "Settings",
-		Items = {},
-	},
 }
 
 function TopNavigationMenu.init()
@@ -269,12 +264,6 @@ function TopNavigationMenu.init()
 end
 
 function TopNavigationMenu.selectTab(categoryData: any)
-	if categoryData.ID == "Settings" then
-		local SettingsMenu = require(script.Parent:WaitForChild("SettingsMenu"))
-		SettingsMenu.toggle()
-		return
-	end
-
 	if activeTab == categoryData.ID then
 		-- Toggle close drawer
 		activeTab = nil

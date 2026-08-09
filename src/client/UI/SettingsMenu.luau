@@ -33,6 +33,31 @@ function SettingsMenu.init()
 	screenGui.DisplayOrder = 150
 	screenGui.IgnoreGuiInset = true
 
+	-- Top-Left Gear Icon Settings Trigger Button (34px x 34px)
+	local gearBtn = Instance.new("TextButton")
+	gearBtn.Name = "TopLeftGearButton"
+	gearBtn.Size = UDim2.new(0, 34, 0, 34)
+	gearBtn.Position = UDim2.new(0, 15, 0, 40)
+	gearBtn.BackgroundColor3 = Color3.fromRGB(16, 16, 24)
+	gearBtn.BackgroundTransparency = 0.35
+	gearBtn.Text = "⚙️"
+	gearBtn.TextSize = 18
+	gearBtn.Parent = screenGui
+
+	local gearCorner = Instance.new("UICorner")
+	gearCorner.CornerRadius = UDim.new(0, 8)
+	gearCorner.Parent = gearBtn
+
+	local gearStroke = Instance.new("UIStroke")
+	gearStroke.Color = Color3.fromRGB(120, 160, 200)
+	gearStroke.Transparency = 0.6
+	gearStroke.Thickness = 1
+	gearStroke.Parent = gearBtn
+
+	gearBtn.MouseButton1Click:Connect(function()
+		SettingsMenu.toggle()
+	end)
+
 	-- Center Modal Window Container (520px x 320px)
 	modalFrame = Instance.new("Frame")
 	modalFrame.Name = "SettingsModal"
