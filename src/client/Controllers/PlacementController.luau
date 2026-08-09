@@ -81,4 +81,8 @@ function PlacementController.setSelectedBlock(blockType: string)
 	end
 end
 
+function PlacementController.isPlacementActiveMode(): boolean
+	return isPlacementActive
+end
+
 return PlacementController

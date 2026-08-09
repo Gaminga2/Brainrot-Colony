@@ -4,14 +4,17 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
 local Controllers = script.Parent:WaitForChild("Controllers")
+local UI = script.Parent:WaitForChild("UI")
 local PlacementController = require(Controllers:WaitForChild("PlacementController"))
 local MinionCommandController = require(Controllers:WaitForChild("MinionCommandController"))
+local TopNavigationMenu = require(UI:WaitForChild("TopNavigationMenu"))
 
-print("[Client] Initializing Project Brainrot Castle (v0.0.1)...")
+print("[Client] Initializing Project Brainrot Castle...")
 
--- Initialize Controllers
+-- Initialize Controllers & UI
 PlacementController.init()
 MinionCommandController.init()
+TopNavigationMenu.init()
 
 -- Create On-Screen HUD Guide for Controls
 local player = Players.LocalPlayer
