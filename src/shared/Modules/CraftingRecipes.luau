@@ -3,9 +3,13 @@ local CraftingRecipes = {}
 
 -- Recipe Master Registry
 CraftingRecipes.Recipes = {
-	-- Terrain Blocks
+	-- Terrain & Environmental Blocks
+	GrassTopBlock1x1 = { { Resource = "SkibidiClay", Amount = 1 } },
 	GrassBlock1x1 = { { Resource = "SkibidiClay", Amount = 1 } },
 	DirtBlock1x1 = { { Resource = "SkibidiClay", Amount = 1 } },
+	CobblestoneBlock1x1 = { { Resource = "GyattGranite", Amount = 3 } },
+	MossyStoneBlock1x1 = { { Resource = "GyattGranite", Amount = 3 }, { Resource = "SkibidiClay", Amount = 1 } },
+	SandstoneBlock1x1 = { { Resource = "SkibidiClay", Amount = 2 } },
 
 	-- Blocks
 	WoodCube1x1 = { { Resource = "OhioWood", Amount = 2 } },

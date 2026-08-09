@@ -3,7 +3,7 @@ local GameConfig = {}
 
 -- Project Metadata
 GameConfig.PROJECT_NAME = "Brainrot Castle (Brainrot Colony)"
-GameConfig.VERSION = "v0.0.24"
+GameConfig.VERSION = "v0.0.25"
 
 -- Voxel Snap Grid Configuration (2x2x2 studs = ~1/3 Roblox NPC height)
 GameConfig.GRID_SIZE = 2
@@ -32,6 +32,15 @@ GameConfig.Resources = {
 -- Basic Building Blocks Registry (Cute Soft Block Palette)
 GameConfig.Blocks = {
 	-- 🌿 Natural Terrain Voxel Blocks
+	GrassTopBlock1x1 = {
+		Name = "Grass Top Block",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Grass,
+		Color = Color3.fromRGB(100, 185, 75),
+		MaxHP = 45,
+		Cost = { SkibidiClay = 1 },
+	},
 	GrassBlock1x1 = {
 		Name = "Grass Block",
 		PartClass = "Part",
@@ -49,6 +58,33 @@ GameConfig.Blocks = {
 		Color = Color3.fromRGB(135, 90, 50),
 		MaxHP = 30,
 		Cost = { SkibidiClay = 1 },
+	},
+	CobblestoneBlock1x1 = {
+		Name = "Cobblestone 1x1",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Cobblestone,
+		Color = Color3.fromRGB(160, 165, 175),
+		MaxHP = 160,
+		Cost = { GyattGranite = 3 },
+	},
+	MossyStoneBlock1x1 = {
+		Name = "Mossy Stone 1x1",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Pavement,
+		Color = Color3.fromRGB(140, 180, 120),
+		MaxHP = 170,
+		Cost = { GyattGranite = 3, SkibidiClay = 1 },
+	},
+	SandstoneBlock1x1 = {
+		Name = "Sandstone 1x1",
+		PartClass = "Part",
+		Size = Vector3.new(2, 2, 2),
+		Material = Enum.Material.Sandstone,
+		Color = Color3.fromRGB(225, 195, 135),
+		MaxHP = 120,
+		Cost = { SkibidiClay = 2 },
 	},
 	-- 🪵 Ohio Wood Series (Soft Caramel Timber)
 	WoodCube1x1 = {

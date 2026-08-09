@@ -42,6 +42,33 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 		return false
 	end
 
+	-- Environment Interaction Engine: Flatten overlapping Smooth Terrain at block location
+	local terrain = Workspace.Terrain
+	if terrain then
+		local blockSize = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
+		terrain:FillBlock(CFrame.new(snappedPos), blockSize + Vector3.new(0.2, 0.2, 0.2), Enum.Material.Air)
+
+		-- Flatten / convert smooth hill surface directly below into a clean blocky voxel foundation
+		local belowPos = snappedPos - Vector3.new(0, GameConfig.GRID_SIZE, 0)
+		local belowKey = GridUtil.toGridKey(belowPos)
+		if not placedBlocks[belowKey] and belowPos.Y > 0 then
+			terrain:FillBlock(CFrame.new(belowPos), Vector3.new(GameConfig.GRID_SIZE + 0.1, GameConfig.GRID_SIZE + 0.1, GameConfig.GRID_SIZE + 0.1), Enum.Material.Air)
+			
+			local foundPart = Instance.new("Part")
+			foundPart.Name = "Voxel_GrassTopBlock1x1_" .. belowKey
+			foundPart.Size = Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
+			foundPart.Position = belowPos
+			foundPart.Anchored = true
+			foundPart.CanCollide = true
+			foundPart:SetAttribute("BlockType", "GrassTopBlock1x1")
+			foundPart:SetAttribute("MaxHP", 45)
+			foundPart:SetAttribute("CurrentHP", 45)
+			BlockVisuals.applyCuteStyling(foundPart, "GrassTopBlock1x1")
+			foundPart.Parent = blocksFolder
+			placedBlocks[belowKey] = foundPart
+		end
+	end
+
 	-- Create block Instance (Part or WedgePart)
 	local partClassName = blockData.PartClass or "Part"
 	local part = Instance.new(partClassName) :: BasePart
@@ -65,7 +92,7 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 	part.Parent = blocksFolder
 	placedBlocks[key] = part
 
-	print(string.format("[BuildingService] Placed %s (%s) at grid position %s", blockData.Name, partClassName, key))
+	print(string.format("[BuildingService] Placed %s (%s) with environment terrain flattening at %s", blockData.Name, partClassName, key))
 	return true
 end
 

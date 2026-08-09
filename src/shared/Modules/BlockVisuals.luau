@@ -22,6 +22,22 @@ function BlockVisuals.applyCuteStyling(part: BasePart, blockType: string)
 		mesh.Parent = part
 	end
 
+	-- Special Multi-Face Texturing for GrassTopBlock1x1
+	if blockType == "GrassTopBlock1x1" then
+		part.Color = Color3.fromRGB(135, 90, 50) -- Dirt side color
+		part.Material = Enum.Material.Ground
+		if not part:FindFirstChild("TopGrassTexture") then
+			local topTex = Instance.new("Texture")
+			topTex.Name = "TopGrassTexture"
+			topTex.Face = Enum.NormalId.Top
+			topTex.Texture = "rbxassetid://6372755" -- Smooth Grass top texture
+			topTex.Color3 = Color3.fromRGB(100, 185, 75)
+			topTex.StudsPerTileU = 2
+			topTex.StudsPerTileV = 2
+			topTex.Parent = part
+		end
+	end
+
 	-- Add Cute Derpy Face Decal on Front Face (20% chance for extra cute brainrot flavor!)
 	if math.random() < 0.35 and not part:FindFirstChild("CuteFaceDecal") then
 		local faceDecal = Instance.new("Decal")

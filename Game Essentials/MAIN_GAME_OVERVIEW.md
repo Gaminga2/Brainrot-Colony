@@ -6,9 +6,15 @@
 ## 📌 Project Meta
 * **Project Name**: Brainrot Castle / Brainrot Colony
 * **Platform**: Roblox (PC, Mobile, Console)
-* **Current Working Version**: `v0.0.24`
+* **Current Working Version**: `v0.0.25`
 * **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
+
+---
+
+## ⛰️ Environment Terrain Flattening Engine (v0.0.25)
+* **Smooth-to-Blocky Terrain Flattening**: Placing any block automatically carves out overlapping Smooth Terrain (`FillBlock Air`). Smooth rounded hill slopes under placed blocks are automatically leveled and converted into clean stepped 2-stud blocky voxel foundations (`GrassTopBlock1x1` / `DirtBlock1x1`).
+* **Expanded Environmental Block Textures**: Added `GrassTopBlock1x1` (top grass texture with dirt sides), `CobblestoneBlock1x1` (chiseled stone), `MossyStoneBlock1x1` (mossy ruin stone), and `SandstoneBlock1x1` (smooth sandstone).
 
 ---
 
