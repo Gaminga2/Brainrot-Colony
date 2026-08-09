@@ -9,6 +9,7 @@
 * **Current Working Version**: `v0.0.25`
 * **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
+* 📜 **Consolidated Version Changelog & Error Tracking**: See [v0.0.25_Terrain_World_and_Textures.md](file:///c:/Users/gamin/Downloads/Roblox/Game%20Essentials/v0.0.25_Terrain_World_and_Textures.md) for full v0.0.23 - v0.0.25 release notes and runtime error/fix logs.
 
 ---
 

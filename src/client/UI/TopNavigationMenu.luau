@@ -19,6 +19,7 @@ local Categories = {
 	{
 		ID = "Blocks",
 		Name = "Blocks",
+		Items = {
 			-- Environmental & Terrain Series
 			{ ID = "GrassTopBlock1x1", Name = "Grass Top Block" },
 			{ ID = "CobblestoneBlock1x1", Name = "Cobblestone 1x1" },

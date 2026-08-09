@@ -3,6 +3,7 @@ local PathfindingService = game:GetService("PathfindingService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local MinionTypes = require(Shared:WaitForChild("Modules"):WaitForChild("MinionTypes"))
@@ -71,7 +72,7 @@ function MinionAIService.spawnMinion(ownerPlayer: Player, minionClass: string, s
 
 	model.Parent = minionsFolder
 
-	local minionId = model:GetDebugId()
+	local minionId = HttpService:GenerateGUID(false)
 	activeMinions[minionId] = {
 		Model = model,
 		Class = minionClass,
