@@ -3,7 +3,7 @@ local GameConfig = {}
 
 -- Project Metadata
 GameConfig.PROJECT_NAME = "Brainrot Castle (Brainrot Colony)"
-GameConfig.VERSION = "v0.0.0.21"
+GameConfig.VERSION = "v0.0.21"
 
 -- Voxel Snap Grid Configuration (2x2x2 studs = ~1/3 Roblox NPC height)
 GameConfig.GRID_SIZE = 2
