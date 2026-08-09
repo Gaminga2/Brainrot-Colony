@@ -14,7 +14,8 @@
 
 ## 🏞️ Roblox Smooth Terrain Minecraft World (v0.0.24)
 * **Native Voxel World Generator (2x Scale)**: Roblox native C++ Smooth Terrain (`Workspace.Terrain`) generates a 2x scale **320x320 stud** Minecraft-style island (`MinecraftWorldGenerator.luau`) with lush grass surfaces (`Enum.Material.Grass`), rich soil sub-layers (`Enum.Material.Ground`), and rock foundations (`Enum.Material.Rock`) with zero part lag!
-* **Island Surface Spawn Location**: Instantiates an `IslandSpawnLocation` part on top of the central grass surface (`Vector3.new(0, surfaceY + 2, 0)`), ensuring players spawn directly on top of the island!
+* **Invisible Ghost Spawn Marker**: `IslandSpawnLocation` is set to `Transparency = 1` and `CanCollide = false`, creating a clean, un-cluttered grass terrain surface where players spawn directly.
+* **Lethal Ocean Water Border**: `MinecraftWorldGenerator` surrounds the island with Smooth Terrain `Enum.Material.Water`. `LethalWaterService.luau` monitors Workspace and instantly eliminates any player or minion falling into the ocean (`Y <= 5`), forcing a respawn on the island!
 * **Native Terrain Digging & Mining**: Added `BuildingService.digTerrain(position, radius)` using `Workspace.Terrain:FillBall(..., Enum.Material.Air)`. Minion NPCs can dig holes, carve caves, and mine soil/stone natively!
 
 ---

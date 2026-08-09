@@ -17,17 +17,15 @@ local function setupIslandSpawnLocation(baseSurfaceY: number, hillHeight: number
 		spawnLocation.Name = "IslandSpawnLocation"
 		spawnLocation.Size = Vector3.new(12, 1, 12)
 		spawnLocation.Anchored = true
-		spawnLocation.CanCollide = true
+		spawnLocation.CanCollide = false -- Non-colliding ghost spawn plate
 		spawnLocation.Neutral = true
 		spawnLocation.Duration = 0
-		spawnLocation.Material = Enum.Material.SmoothPlastic
-		spawnLocation.Color = Color3.fromRGB(100, 185, 75)
-		spawnLocation.Transparency = 0.6
+		spawnLocation.Transparency = 1 -- Fully invisible spawn marker
 		spawnLocation.Parent = Workspace
 	end
 
 	spawnLocation.CFrame = CFrame.new(0, centerSurfaceY + 2, 0)
-	print(string.format("[MinecraftWorldGenerator] Positioned IslandSpawnLocation on top surface at Y = %d", centerSurfaceY + 2))
+	print(string.format("[MinecraftWorldGenerator] Positioned invisible ghost IslandSpawnLocation at Y = %d", centerSurfaceY + 2))
 end
 
 function MinecraftWorldGenerator.generateWorld()
@@ -49,7 +47,7 @@ function MinecraftWorldGenerator.generateWorld()
 	-- Clear old terrain if re-generating
 	terrain:Clear()
 
-	print("[MinecraftWorldGenerator] Generating 2x smooth Minecraft-style voxel world (320 studs)...")
+	print("[MinecraftWorldGenerator] Generating 2x smooth Minecraft-style voxel world (320 studs) with surrounding ocean...")
 	local halfSize = cfg.WORLD_SIZE_STUDS / 2
 	local step = cfg.STEP_STUDS
 	local noiseScale = cfg.NOISE_SCALE
@@ -57,11 +55,13 @@ function MinecraftWorldGenerator.generateWorld()
 	local hillHeight = cfg.HILL_HEIGHT or 18
 	local baseSurfaceY = cfg.BASE_SURFACE_Y or 12
 
-	for x = -halfSize, halfSize, step do
-		for z = -halfSize, halfSize, step do
-			-- Circular island boundary mask
+	local maxRadius = halfSize + 120 -- Surrounding lethal ocean border radius
+
+	for x = -maxRadius, maxRadius, step do
+		for z = -maxRadius, maxRadius, step do
 			local distFromCenter = math.sqrt(x * x + z * z)
 			if distFromCenter <= halfSize then
+				-- Island Terrain
 				local falloff = (1 - (distFromCenter / halfSize) ^ 2)
 				local noiseVal = math.noise(x * noiseScale, z * noiseScale, seed)
 				local surfaceY = math.floor(baseSurfaceY + (noiseVal * hillHeight * falloff))
@@ -82,14 +82,19 @@ function MinecraftWorldGenerator.generateWorld()
 				local grassCFrame = CFrame.new(x, surfaceY - 1, z)
 				local grassSize = Vector3.new(step, 2, step)
 				terrain:FillBlock(grassCFrame, grassSize, Enum.Material.Grass)
+			elseif distFromCenter <= maxRadius then
+				-- Surrounding Ocean Water Border (Y = 0 to Y = 6)
+				local waterCFrame = CFrame.new(x, 3, z)
+				local waterSize = Vector3.new(step, 6, step)
+				terrain:FillBlock(waterCFrame, waterSize, Enum.Material.Water)
 			end
 		end
 	end
 
-	-- Create / position central top surface SpawnLocation
+	-- Create / position central top surface invisible SpawnLocation
 	setupIslandSpawnLocation(baseSurfaceY, hillHeight, noiseScale, seed)
 
-	print("[MinecraftWorldGenerator] 2x Minecraft-style Smooth Terrain world & spawn setup complete!")
+	print("[MinecraftWorldGenerator] 2x Minecraft-style Smooth Terrain world & ocean border complete!")
 end
 
 function MinecraftWorldGenerator.init()
