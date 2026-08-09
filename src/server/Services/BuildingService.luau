@@ -5,6 +5,7 @@ local Workspace = game:GetService("Workspace")
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
 local GridUtil = require(Shared:WaitForChild("Modules"):WaitForChild("GridUtil"))
+local BlockVisuals = require(Shared:WaitForChild("Modules"):WaitForChild("BlockVisuals"))
 
 local BuildingService = {}
 local placedBlocks: { [string]: Instance } = {}
@@ -56,6 +57,9 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 	if player then
 		part:SetAttribute("OwnerUserId", player.UserId)
 	end
+
+	-- Apply Cute Brainrot Block Visuals (Soft Bevels & Derpy Face Decals)
+	BlockVisuals.applyCuteStyling(part, blockType)
 
 	part.Parent = blocksFolder
 	placedBlocks[key] = part

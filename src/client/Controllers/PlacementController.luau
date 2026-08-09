@@ -10,6 +10,7 @@ local Mouse = LocalPlayer:GetMouse()
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
 local GridUtil = require(Shared:WaitForChild("Modules"):WaitForChild("GridUtil"))
+local BlockVisuals = require(Shared:WaitForChild("Modules"):WaitForChild("BlockVisuals"))
 
 local PlacementController = {}
 local ghostPart: BasePart? = nil
@@ -28,6 +29,15 @@ local function createGhostPart(blockType: string): BasePart
 	ghost.Material = Enum.Material.ForceField
 	ghost.Color = blockData.Color or Color3.fromRGB(0, 255, 120)
 	ghost.Transparency = 0.4
+
+	-- Apply Soft Bevel Mesh
+	if partClass == "Part" then
+		local mesh = Instance.new("SpecialMesh")
+		mesh.MeshType = Enum.MeshType.Brick
+		mesh.Scale = Vector3.new(0.98, 0.98, 0.98)
+		mesh.Parent = ghost
+	end
+
 	return ghost
 end
 

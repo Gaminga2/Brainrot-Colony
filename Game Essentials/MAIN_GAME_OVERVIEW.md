@@ -22,6 +22,18 @@
 
 ---
 
+## 🎨 Cute Brainrot Visual Engine ("Soft Cubes & Derpy Decals")
+* **Pillowy Soft Meshes**: Blocks use inset rounded bevel meshes (`SpecialMesh`) for a soft, cute, tactile toy brick feel instead of harsh sharp edges.
+* **Pastel Color Palette**:
+  - 🪵 **Ohio Wood**: Soft Caramel Honey (`#DCA064`)
+  - 🪨 **Gyatt Granite**: Soft Mint / Periwinkle Stone (`#B4CDD7`)
+  - 🧱 **Skibidi Clay**: Soft Strawberry Pink Brick (`#EB8282`)
+  - 🏗️ **Sigma Concrete**: Soft Lavender Grey (`#C8C3D2`)
+  - ⚡ **Rizzite Shield**: Soft Pastel Cyan Glow (`#78F0FF`)
+* **Derpy Face Decals**: Placed blocks randomly spawn cute derpy blush faces (*OwO*, *UwU*, *Happy Smile*, *Derpy Blush*) on front surfaces for playful "cute brainrot" vibes!
+
+---
+
 ## ⛏️ Resources & Materials System
 | Resource Name | Node Source | Primary Uses | Material Aesthetic |
 | :--- | :--- | :--- | :--- |
