@@ -262,7 +262,7 @@ function TopNavigationMenu.selectTab(categoryData: any)
 		card.MouseButton1Click:Connect(function()
 			print(string.format("[TopNavigationMenu] Selected item: %s (%s)", item.Name, categoryData.ID))
 			if categoryData.ID == "Blocks" then
-				local PlacementController = require(script.Parent.Parent.Controllers.PlacementController)
+				local PlacementController = require(script.Parent.Parent:WaitForChild("Controllers"):WaitForChild("PlacementController"))
 				PlacementController.setSelectedBlock(item.ID)
 				if not PlacementController.isPlacementActiveMode() then
 					PlacementController.togglePlacementMode()
