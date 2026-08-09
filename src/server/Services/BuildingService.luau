@@ -89,6 +89,16 @@ function BuildingService.damageBlock(position: Vector3, damageAmount: number)
 	end
 end
 
+-- Dig/Mine native Smooth Terrain
+function BuildingService.digTerrain(position: Vector3, radius: number?)
+	local terrain = Workspace.Terrain
+	if terrain then
+		local rad = radius or 3
+		terrain:FillBall(position, rad, Enum.Material.Air)
+		print(string.format("[BuildingService] Dug terrain hole at %s (radius: %.1f)", tostring(position), rad))
+	end
+end
+
 function BuildingService.registerGeneratedBlock(part: BasePart, key: string)
 	placedBlocks[key] = part
 end

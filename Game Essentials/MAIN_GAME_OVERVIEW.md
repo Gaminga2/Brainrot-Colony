@@ -6,15 +6,15 @@
 ## 📌 Project Meta
 * **Project Name**: Brainrot Castle / Brainrot Colony
 * **Platform**: Roblox (PC, Mobile, Console)
-* **Current Working Version**: `v0.0.23`
+* **Current Working Version**: `v0.0.24`
 * **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
 
 ---
 
-## 🏞️ Procedural Voxel Island & Destructible Ground (v0.0.23)
-* **Dynamic Procedural Generation**: Island terrain does not exist statically—it generates dynamically on server boot (`VoxelTerrainGenerator.luau`) using 2D Perlin noise (`math.noise`) into a floating island with natural rolling hills.
-* **100% Destructible Voxel Blocks**: The ground is built using the exact same 2-stud voxel block engine as player buildings (`GrassBlock1x1` top layer, `DirtBlock1x1` sub-layer, `StoneCube1x1` core). Minion NPCs can dig down, mine soil/stone, carve underground passages, and clear land.
+## 🏞️ Roblox Smooth Terrain Minecraft World (v0.0.24)
+* **Native Voxel World Generator**: Replaced loose part instances with Roblox native C++ Smooth Terrain (`Workspace.Terrain`). Generates a vast 128x128 stud Minecraft-style island (`MinecraftWorldGenerator.luau`) with lush grass surfaces (`Enum.Material.Grass`), rich soil sub-layers (`Enum.Material.Dirt`), and rock foundations (`Enum.Material.Rock`) with zero part lag!
+* **Native Terrain Digging & Mining**: Added `BuildingService.digTerrain(position, radius)` using `Workspace.Terrain:FillBall(..., Enum.Material.Air)`. Minion NPCs can dig holes, carve caves, and mine soil/stone natively!
 
 ---
 
