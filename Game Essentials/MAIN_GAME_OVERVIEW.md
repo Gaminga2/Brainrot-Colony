@@ -6,19 +6,16 @@
 ## 📌 Project Meta
 * **Project Name**: Brainrot Castle / Brainrot Colony
 * **Platform**: Roblox (PC, Mobile, Console)
-* **Current Working Version**: `v0.0.0.21`
-* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege
+* **Current Working Version**: `v0.0.22`
+* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
 
 ---
 
-## 📐 Voxel Grid & Architectural Scale
-* **Base Grid Unit**: `GRID_SIZE = 2 studs` (`2 x 2 x 2` studs per 1x1 block).
-* **Relative NPC Scale**:
-  - Standard Roblox Avatar Height: `~5.0 - 5.5 studs`.
-  - `1x1 Block` (2 studs height) = **~1/3 of an NPC height**.
-  - `3 Stacked Blocks` (6 studs height) = **~1 full NPC height**.
-* Allows precision castle architecture: arrow slits, battlements, stairs, pillars, half-walls, and micro-minion brick placement.
+## 📐 3D Visual Blueprint Voxel Grid Mode (v0.0.22)
+* **Visual Non-Colliding Grid Projection**: When Build Mode is toggled ON (`B` or selecting a block), a 3D visual blueprint voxel grid plane projects dynamically onto the ground/surfaces beneath the cursor (`CanCollide = false`, `CanTouch = false`, `CanQuery = false`).
+* **Cyan Blueprint Holograms**: Placement preview blocks render as cyan blueprint holograms (`Color3.fromRGB(0, 190, 255)`, `Material = ForceField`, `Transparency = 0.35`) emphasizing that building mode is a blueprint planning phase.
+* **Solid Placed Physical Blocks**: Placed blocks spawn as solid 3D structures (`CanCollide = true`, `Anchored = true`) for physical collision.
 
 ---
 

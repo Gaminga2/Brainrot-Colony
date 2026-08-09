@@ -16,10 +16,11 @@ local GameSettings = require(Shared:WaitForChild("Modules"):WaitForChild("GameSe
 
 local PlacementController = {}
 local ghostPart: BasePart? = nil
+local gridOverlayPart: BasePart? = nil
 local isPlacementActive: boolean = false
 local selectedBlockType: string = "WoodCube1x1"
 
--- Filtered Raycast Helper: Ignores player character, accessories, minions, and ghost preview
+-- Filtered Raycast Helper: Ignores player character, accessories, minions, ghost preview, and grid overlay
 local function getFilteredMouseHit(): Vector3?
 	if not Camera then
 		Camera = Workspace.CurrentCamera
@@ -43,6 +44,9 @@ local function getFilteredMouseHit(): Vector3?
 	if ghostPart then
 		table.insert(filterList, ghostPart)
 	end
+	if gridOverlayPart then
+		table.insert(filterList, gridOverlayPart)
+	end
 
 	params.FilterDescendantsInstances = filterList
 
@@ -53,6 +57,22 @@ local function getFilteredMouseHit(): Vector3?
 	return nil
 end
 
+-- Create Visual Blueprint Grid Plane Overlay
+local function createGridOverlayPart(): BasePart
+	local plane = Instance.new("Part")
+	plane.Name = "VisualBlueprintGridOverlay"
+	plane.Size = Vector3.new(32, 0.05, 32)
+	plane.Anchored = true
+	plane.CanCollide = false
+	plane.CanTouch = false
+	plane.CanQuery = false
+	plane.Material = Enum.Material.ForceField
+	plane.Color = Color3.fromRGB(0, 180, 255)
+	plane.Transparency = 0.55
+	return plane
+end
+
+-- Create Visual Cyan Blueprint Hologram Preview Ghost
 local function createGhostPart(blockType: string): BasePart
 	local blockData = GameConfig.Blocks[blockType] or GameConfig.Blocks.WoodCube1x1
 	local partClass = blockData.PartClass or "Part"
@@ -62,9 +82,11 @@ local function createGhostPart(blockType: string): BasePart
 	ghost.Size = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
 	ghost.Anchored = true
 	ghost.CanCollide = false
+	ghost.CanTouch = false
+	ghost.CanQuery = false
 	ghost.Material = Enum.Material.ForceField
-	ghost.Color = blockData.Color or Color3.fromRGB(0, 255, 120)
-	ghost.Transparency = 0.4
+	ghost.Color = Color3.fromRGB(0, 190, 255) -- Cyan Blueprint Hologram Color
+	ghost.Transparency = 0.35
 
 	-- Apply Soft Bevel Mesh
 	if partClass == "Part" then
@@ -79,6 +101,7 @@ end
 
 function PlacementController.init()
 	ghostPart = createGhostPart(selectedBlockType)
+	gridOverlayPart = createGridOverlayPart()
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end
@@ -99,7 +122,7 @@ function PlacementController.init()
 				if placeBlockRemote then
 					local success = placeBlockRemote:InvokeServer(selectedBlockType, snapped)
 					if success then
-						print("[PlacementController] Successfully placed block:", selectedBlockType)
+						print("[PlacementController] Successfully placed blueprint block:", selectedBlockType)
 					else
 						warn("[PlacementController] Placement failed.")
 					end
@@ -113,6 +136,8 @@ function PlacementController.togglePlacementMode()
 	isPlacementActive = not isPlacementActive
 	if isPlacementActive then
 		if ghostPart then ghostPart.Parent = Workspace end
+		if gridOverlayPart then gridOverlayPart.Parent = Workspace end
+
 		task.spawn(function()
 			while isPlacementActive do
 				local hitPos = getFilteredMouseHit() or (Mouse.Hit and Mouse.Hit.Position)
@@ -121,20 +146,30 @@ function PlacementController.togglePlacementMode()
 					local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
 					local snapPos = GridUtil.snapToGrid(hitPos + Vector3.new(0, yOffset, 0))
 
+					-- Move ghost block preview
 					if GameSettings.get("SmoothGridSnapping") then
 						ghostPart.Position = ghostPart.Position:Lerp(snapPos, GameSettings.get("GridLerpSpeed") or 0.35)
 					else
 						ghostPart.Position = snapPos
 					end
+
+					-- Move 3D visual blueprint grid plane directly under cursor
+					if gridOverlayPart then
+						local gridCenter = GridUtil.snapToGrid(hitPos)
+						gridOverlayPart.Position = Vector3.new(gridCenter.X, hitPos.Y + 0.02, gridCenter.Z)
+					end
 				end
 				task.wait(0.03)
 			end
+
 			if ghostPart then ghostPart.Parent = nil end
+			if gridOverlayPart then gridOverlayPart.Parent = nil end
 		end)
-		print("[PlacementController] Placement Mode: ON (Press B to toggle)")
+		print("[PlacementController] Visual Blueprint Build Mode: ON (Press B to toggle)")
 	else
 		if ghostPart then ghostPart.Parent = nil end
-		print("[PlacementController] Placement Mode: OFF")
+		if gridOverlayPart then gridOverlayPart.Parent = nil end
+		print("[PlacementController] Visual Blueprint Build Mode: OFF")
 	end
 end
 
@@ -150,7 +185,7 @@ function PlacementController.setSelectedBlock(blockType: string)
 		if wasActive then
 			ghostPart.Parent = Workspace
 		end
-		print("[PlacementController] Selected Block:", GameConfig.Blocks[blockType].Name)
+		print("[PlacementController] Selected Blueprint Block:", GameConfig.Blocks[blockType].Name)
 	end
 end
 
