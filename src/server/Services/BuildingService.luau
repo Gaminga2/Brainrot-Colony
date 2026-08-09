@@ -42,30 +42,37 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 		return false
 	end
 
-	-- Environment Interaction Engine: Flatten overlapping Smooth Terrain at block location
+	-- Environment Interaction Engine: Flatten 3x3 surrounding Smooth Terrain neighborhood around block location
 	local terrain = Workspace.Terrain
 	if terrain then
-		local blockSize = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
-		terrain:FillBlock(CFrame.new(snappedPos), blockSize + Vector3.new(0.2, 0.2, 0.2), Enum.Material.Air)
+		local gs = GameConfig.GRID_SIZE
+		local blockSize = blockData.Size or Vector3.new(gs, gs, gs)
+		
+		-- Clear smooth terrain volume in placed cell AND 3x3 surrounding neighborhood
+		terrain:FillBlock(CFrame.new(snappedPos), blockSize + Vector3.new(gs * 2 + 0.2, 0.4, gs * 2 + 0.2), Enum.Material.Air)
 
-		-- Flatten / convert smooth hill surface directly below into a clean blocky voxel foundation
-		local belowPos = snappedPos - Vector3.new(0, GameConfig.GRID_SIZE, 0)
-		local belowKey = GridUtil.toGridKey(belowPos)
-		if not placedBlocks[belowKey] and belowPos.Y > 0 then
-			terrain:FillBlock(CFrame.new(belowPos), Vector3.new(GameConfig.GRID_SIZE + 0.1, GameConfig.GRID_SIZE + 0.1, GameConfig.GRID_SIZE + 0.1), Enum.Material.Air)
-			
-			local foundPart = Instance.new("Part")
-			foundPart.Name = "Voxel_GrassTopBlock1x1_" .. belowKey
-			foundPart.Size = Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
-			foundPart.Position = belowPos
-			foundPart.Anchored = true
-			foundPart.CanCollide = true
-			foundPart:SetAttribute("BlockType", "GrassTopBlock1x1")
-			foundPart:SetAttribute("MaxHP", 45)
-			foundPart:SetAttribute("CurrentHP", 45)
-			BlockVisuals.applyCuteStyling(foundPart, "GrassTopBlock1x1")
-			foundPart.Parent = blocksFolder
-			placedBlocks[belowKey] = foundPart
+		-- Level 3x3 ground neighbor cells directly below into clean blocky voxel foundations
+		for dx = -gs, gs, gs do
+			for dz = -gs, gs, gs do
+				local neighborBelowPos = snappedPos + Vector3.new(dx, -gs, dz)
+				local neighborKey = GridUtil.toGridKey(neighborBelowPos)
+				if not placedBlocks[neighborKey] and neighborBelowPos.Y > 0 then
+					terrain:FillBlock(CFrame.new(neighborBelowPos), Vector3.new(gs + 0.1, gs + 0.1, gs + 0.1), Enum.Material.Air)
+
+					local foundPart = Instance.new("Part")
+					foundPart.Name = "Voxel_GrassTopBlock1x1_" .. neighborKey
+					foundPart.Size = Vector3.new(gs, gs, gs)
+					foundPart.Position = neighborBelowPos
+					foundPart.Anchored = true
+					foundPart.CanCollide = true
+					foundPart:SetAttribute("BlockType", "GrassTopBlock1x1")
+					foundPart:SetAttribute("MaxHP", 45)
+					foundPart:SetAttribute("CurrentHP", 45)
+					BlockVisuals.applyCuteStyling(foundPart, "GrassTopBlock1x1")
+					foundPart.Parent = blocksFolder
+					placedBlocks[neighborKey] = foundPart
+				end
+			end
 		end
 	end
 

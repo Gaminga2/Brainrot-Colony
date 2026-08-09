@@ -413,6 +413,60 @@ function SettingsMenu.renderCategoryContent(categoryId: string)
 			GameSettings.set("MewingSFX", newState)
 			SettingsMenu.renderCategoryContent("AudioVisuals")
 		end)
+
+		-- Render Grass Height Setting Row
+		local grassRow = Instance.new("Frame")
+		grassRow.Size = UDim2.new(1, 0, 0, 36)
+		grassRow.BackgroundColor3 = Color3.fromRGB(28, 28, 40)
+		grassRow.BackgroundTransparency = 0.4
+		grassRow.Parent = rightContentFrame
+
+		local gCorner = Instance.new("UICorner")
+		gCorner.CornerRadius = UDim.new(0, 6)
+		gCorner.Parent = grassRow
+
+		local gLabel = Instance.new("TextLabel")
+		gLabel.Text = "Grass Blade Height"
+		gLabel.Font = Enum.Font.SourceSansBold
+		gLabel.TextSize = 13
+		gLabel.TextColor3 = Color3.fromRGB(240, 240, 255)
+		gLabel.Size = UDim2.new(0.55, 0, 1, 0)
+		gLabel.Position = UDim2.new(0, 10, 0, 0)
+		gLabel.TextXAlignment = Enum.TextXAlignment.Left
+		gLabel.BackgroundTransparency = 1
+		gLabel.Parent = grassRow
+
+		local currentGrass = GameSettings.get("GrassHeight") or "Short"
+		local grassBtn = Instance.new("TextButton")
+		grassBtn.Text = currentGrass
+		grassBtn.Font = Enum.Font.SourceSansBold
+		grassBtn.TextSize = 11
+		grassBtn.TextColor3 = Color3.fromRGB(0, 255, 180)
+		grassBtn.Size = UDim2.new(0, 75, 0, 24)
+		grassBtn.Position = UDim2.new(1, -83, 0, 6)
+		grassBtn.BackgroundColor3 = Color3.fromRGB(40, 65, 85)
+		grassBtn.Parent = grassRow
+
+		local gbCorner = Instance.new("UICorner")
+		gbCorner.CornerRadius = UDim.new(0, 5)
+		gbCorner.Parent = grassBtn
+
+		local grassCycle = { "Off", "Short", "Medium", "Tall" }
+		grassBtn.MouseButton1Click:Connect(function()
+			local curIdx = table.find(grassCycle, currentGrass) or 1
+			local nextIdx = (curIdx % #grassCycle) + 1
+			local nextVal = grassCycle[nextIdx]
+			GameSettings.set("GrassHeight", nextVal)
+
+			-- Control Workspace.Terrain.Decoration
+			local Workspace = game:GetService("Workspace")
+			local terrain = Workspace:FindFirstChildOfClass("Terrain")
+			if terrain then
+				terrain.Decoration = (nextVal ~= "Off")
+			end
+
+			SettingsMenu.renderCategoryContent("AudioVisuals")
+		end)
 	end
 end
 

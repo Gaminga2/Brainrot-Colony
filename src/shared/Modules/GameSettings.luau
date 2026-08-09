@@ -10,6 +10,7 @@ GameSettings.Data = {
 	SmoothGridSnapping = true,   -- Smooth lerped ghost movement
 	GridLerpSpeed = 0.35,         -- Lerp factor (0.1 = super soft, 1.0 = instant)
 	MewingSFX = true,             -- Brainrot voicelines & SFX
+	GrassHeight = "Short",        -- Grass blade height (Off, Short, Medium, Tall)
 }
 
 -- Set a setting value
