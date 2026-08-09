@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
+local Camera = Workspace.CurrentCamera
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
@@ -17,6 +18,40 @@ local PlacementController = {}
 local ghostPart: BasePart? = nil
 local isPlacementActive: boolean = false
 local selectedBlockType: string = "WoodCube1x1"
+
+-- Filtered Raycast Helper: Ignores player character, accessories, minions, and ghost preview
+local function getFilteredMouseHit(): Vector3?
+	if not Camera then
+		Camera = Workspace.CurrentCamera
+	end
+	if not Camera then return nil end
+
+	local mousePos = UserInputService:GetMouseLocation()
+	local unitRay = Camera:ViewportPointToRay(mousePos.X, mousePos.Y)
+
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+
+	local filterList = {}
+	if LocalPlayer.Character then
+		table.insert(filterList, LocalPlayer.Character)
+	end
+	local minionsFolder = Workspace:FindFirstChild("BrainrotMinions")
+	if minionsFolder then
+		table.insert(filterList, minionsFolder)
+	end
+	if ghostPart then
+		table.insert(filterList, ghostPart)
+	end
+
+	params.FilterDescendantsInstances = filterList
+
+	local result = Workspace:Raycast(unitRay.Origin, unitRay.Direction * 1000, params)
+	if result then
+		return result.Position
+	end
+	return nil
+end
 
 local function createGhostPart(blockType: string): BasePart
 	local blockData = GameConfig.Blocks[blockType] or GameConfig.Blocks.WoodCube1x1
@@ -53,10 +88,11 @@ function PlacementController.init()
 			PlacementController.togglePlacementMode()
 		elseif isPlacementActive and input.UserInputType == Enum.UserInputType.MouseButton1 then
 			-- Attempt block placement on mouse click
-			if Mouse.Target then
+			local hitPos = getFilteredMouseHit() or (Mouse.Hit and Mouse.Hit.Position)
+			if hitPos then
 				local blockData = GameConfig.Blocks[selectedBlockType]
 				local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
-				local targetPos = Mouse.Hit.Position + Vector3.new(0, yOffset, 0)
+				local targetPos = hitPos + Vector3.new(0, yOffset, 0)
 				local snapped = GridUtil.snapToGrid(targetPos)
 
 				local placeBlockRemote = ReplicatedStorage:FindFirstChild("PlaceBlockRequest") :: RemoteFunction
@@ -79,10 +115,11 @@ function PlacementController.togglePlacementMode()
 		if ghostPart then ghostPart.Parent = Workspace end
 		task.spawn(function()
 			while isPlacementActive do
-				if Mouse.Hit and ghostPart then
+				local hitPos = getFilteredMouseHit() or (Mouse.Hit and Mouse.Hit.Position)
+				if hitPos and ghostPart then
 					local blockData = GameConfig.Blocks[selectedBlockType]
 					local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
-					local snapPos = GridUtil.snapToGrid(Mouse.Hit.Position + Vector3.new(0, yOffset, 0))
+					local snapPos = GridUtil.snapToGrid(hitPos + Vector3.new(0, yOffset, 0))
 
 					if GameSettings.get("SmoothGridSnapping") then
 						ghostPart.Position = ghostPart.Position:Lerp(snapPos, GameSettings.get("GridLerpSpeed") or 0.35)

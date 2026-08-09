@@ -6,17 +6,9 @@
 ## 📌 Project Meta
 * **Project Name**: Brainrot Castle / Brainrot Colony
 * **Platform**: Roblox (PC, Mobile, Console)
-* **Current Working Version**: `v0.0.21`
-* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
+* **Current Working Version**: `v0.0.0.21`
+* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
-
----
-
-## ⚙️ Game Settings & Creative Mode
-* 📜 **Master Settings Reference**: See [Settings.md](file:///c:/Users/gamin/Downloads/Roblox/Game%20Essentials/Settings.md) for full game modes, cheats, and grid smoothness toggles.
-* 🛠️ **In-Game Settings Popup**: Click `Settings` tab in top bar or press `[F2]` to open the modal popup window (side tabs for `Game Modes`, `Developer Cheats`, `Grid & Building`, `Audio & Visuals`).
-* 🎨 **Creative Mode**: Infinite resources, zero placement cost, and instant building sandbox for testing!
-* 📐 **Smooth Grid Lerp**: Smooth 3D vector interpolation (`ghostPart.Position:Lerp`) replaces harsh snappy jitter.
 
 ---
 
@@ -27,6 +19,12 @@
   - `1x1 Block` (2 studs height) = **~1/3 of an NPC height**.
   - `3 Stacked Blocks` (6 studs height) = **~1 full NPC height**.
 * Allows precision castle architecture: arrow slits, battlements, stairs, pillars, half-walls, and micro-minion brick placement.
+
+---
+
+## 👻 Ghost Commander Avatar & Raycast Filtering
+* **Non-Colliding Ghost Avatar**: Player character body parts have `CanCollide = false` and soft translucent aesthetics (`Transparency = 0.35`). Players can walk smoothly through placed walls, blocks, and minions without getting stuck or bugging physics.
+* **Filtered Placement Raycasting**: `PlacementController` uses `RaycastParams` excluding the Player Character, accessories, minions, and placement ghost preview. Building raycasts pass 100% cleanly through characters and minions to snap accurately to ground baseplates and walls.
 
 ---
 
@@ -56,7 +54,7 @@
 
 ---
 
-## 🧱 Basic Building Blocks Library (v0.0.0.21)
+## 🧱 Basic Building Blocks Library (v0.0.21)
 
 | Block Name | Shape Class | Dimensions (Studs) | Material | Primary Cost |
 | :--- | :--- | :--- | :--- | :--- |

@@ -7,6 +7,7 @@ local Controllers = script:WaitForChild("Controllers")
 local UI = script:WaitForChild("UI")
 local PlacementController = require(Controllers:WaitForChild("PlacementController"))
 local MinionCommandController = require(Controllers:WaitForChild("MinionCommandController"))
+local GhostPlayerController = require(Controllers:WaitForChild("GhostPlayerController"))
 local TopNavigationMenu = require(UI:WaitForChild("TopNavigationMenu"))
 local SettingsMenu = require(UI:WaitForChild("SettingsMenu"))
 
@@ -15,6 +16,7 @@ print("[Client] Initializing Project Brainrot Castle...")
 -- Initialize Controllers & UI
 PlacementController.init()
 MinionCommandController.init()
+GhostPlayerController.init()
 TopNavigationMenu.init()
 SettingsMenu.init()
 
