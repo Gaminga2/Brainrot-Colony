@@ -21,11 +21,11 @@ function PlayerProfileHUD.init()
 	screenGui.DisplayOrder = 90
 	screenGui.IgnoreGuiInset = true
 
-	-- Profile HUD Container (220px wide x 175px high, top-left under gear button)
+	-- Profile HUD Container (220px wide x 175px high, top-right under gear button)
 	containerFrame = Instance.new("Frame")
 	containerFrame.Name = "ProfileContainer"
 	containerFrame.Size = UDim2.new(0, 220, 0, 175)
-	containerFrame.Position = UDim2.new(0, 15, 0, 80)
+	containerFrame.Position = UDim2.new(1, -235, 0, 55)
 	containerFrame.BackgroundColor3 = Color3.fromRGB(16, 16, 24)
 	containerFrame.BackgroundTransparency = 0.35
 	containerFrame.BorderSizePixel = 0

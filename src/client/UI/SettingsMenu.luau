@@ -33,11 +33,11 @@ function SettingsMenu.init()
 	screenGui.DisplayOrder = 150
 	screenGui.IgnoreGuiInset = true
 
-	-- Top-Left Gear Icon Settings Trigger Button (34px x 34px)
+	-- Top-Right Gear Icon Settings Trigger Button (34px x 34px)
 	local gearBtn = Instance.new("TextButton")
-	gearBtn.Name = "TopLeftGearButton"
+	gearBtn.Name = "TopRightGearButton"
 	gearBtn.Size = UDim2.new(0, 34, 0, 34)
-	gearBtn.Position = UDim2.new(0, 15, 0, 40)
+	gearBtn.Position = UDim2.new(1, -49, 0, 15)
 	gearBtn.BackgroundColor3 = Color3.fromRGB(16, 16, 24)
 	gearBtn.BackgroundTransparency = 0.35
 	gearBtn.Text = "⚙️"
