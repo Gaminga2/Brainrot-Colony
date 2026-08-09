@@ -12,21 +12,27 @@ local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConf
 local GridUtil = require(Shared:WaitForChild("Modules"):WaitForChild("GridUtil"))
 
 local PlacementController = {}
-local ghostPart: Part? = nil
+local ghostPart: BasePart? = nil
 local isPlacementActive: boolean = false
-local selectedBlockType: string = "WoodWall"
+local selectedBlockType: string = "WoodCube1x1"
+
+local function createGhostPart(blockType: string): BasePart
+	local blockData = GameConfig.Blocks[blockType] or GameConfig.Blocks.WoodCube1x1
+	local partClass = blockData.PartClass or "Part"
+
+	local ghost = Instance.new(partClass) :: BasePart
+	ghost.Name = "PlacementGhost"
+	ghost.Size = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
+	ghost.Anchored = true
+	ghost.CanCollide = false
+	ghost.Material = Enum.Material.ForceField
+	ghost.Color = blockData.Color or Color3.fromRGB(0, 255, 120)
+	ghost.Transparency = 0.4
+	return ghost
+end
 
 function PlacementController.init()
-	-- Create visual semi-transparent ghost box for placement feedback
-	ghostPart = Instance.new("Part")
-	ghostPart.Name = "PlacementGhost"
-	ghostPart.Size = Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
-	ghostPart.Anchored = true
-	ghostPart.CanCollide = false
-	ghostPart.Material = Enum.Material.ForceField
-	ghostPart.Color = Color3.fromRGB(0, 255, 120)
-	ghostPart.Transparency = 0.5
-	ghostPart.Parent = nil
+	ghostPart = createGhostPart(selectedBlockType)
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end
@@ -37,14 +43,16 @@ function PlacementController.init()
 		elseif isPlacementActive and input.UserInputType == Enum.UserInputType.MouseButton1 then
 			-- Attempt block placement on mouse click
 			if Mouse.Target then
-				local targetPos = Mouse.Hit.Position + Vector3.new(0, GameConfig.GRID_SIZE / 2, 0)
+				local blockData = GameConfig.Blocks[selectedBlockType]
+				local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
+				local targetPos = Mouse.Hit.Position + Vector3.new(0, yOffset, 0)
 				local snapped = GridUtil.snapToGrid(targetPos)
 
 				local placeBlockRemote = ReplicatedStorage:FindFirstChild("PlaceBlockRequest") :: RemoteFunction
 				if placeBlockRemote then
 					local success = placeBlockRemote:InvokeServer(selectedBlockType, snapped)
 					if success then
-						print("[PlacementController] Successfully placed block!")
+						print("[PlacementController] Successfully placed block:", selectedBlockType)
 					else
 						warn("[PlacementController] Placement failed.")
 					end
@@ -61,7 +69,9 @@ function PlacementController.togglePlacementMode()
 		task.spawn(function()
 			while isPlacementActive do
 				if Mouse.Hit and ghostPart then
-					local snapPos = GridUtil.snapToGrid(Mouse.Hit.Position + Vector3.new(0, GameConfig.GRID_SIZE / 2, 0))
+					local blockData = GameConfig.Blocks[selectedBlockType]
+					local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
+					local snapPos = GridUtil.snapToGrid(Mouse.Hit.Position + Vector3.new(0, yOffset, 0))
 					ghostPart.Position = snapPos
 				end
 				task.wait(0.03)
@@ -78,6 +88,16 @@ end
 function PlacementController.setSelectedBlock(blockType: string)
 	if GameConfig.Blocks[blockType] then
 		selectedBlockType = blockType
+		local wasActive = isPlacementActive
+		if ghostPart then
+			ghostPart:Destroy()
+			ghostPart = nil
+		end
+		ghostPart = createGhostPart(selectedBlockType)
+		if wasActive then
+			ghostPart.Parent = Workspace
+		end
+		print("[PlacementController] Selected Block:", GameConfig.Blocks[blockType].Name)
 	end
 end
 

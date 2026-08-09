@@ -7,7 +7,7 @@ local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConf
 local GridUtil = require(Shared:WaitForChild("Modules"):WaitForChild("GridUtil"))
 
 local BuildingService = {}
-local placedBlocks: { [string]: Part } = {}
+local placedBlocks: { [string]: Instance } = {}
 local blocksFolder: Folder
 
 function BuildingService.init()
@@ -41,10 +41,11 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 		return false
 	end
 
-	-- Create block Part
-	local part = Instance.new("Part")
+	-- Create block Instance (Part or WedgePart)
+	local partClassName = blockData.PartClass or "Part"
+	local part = Instance.new(partClassName) :: BasePart
 	part.Name = "Voxel_" .. blockType .. "_" .. key
-	part.Size = Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
+	part.Size = blockData.Size or Vector3.new(GameConfig.GRID_SIZE, GameConfig.GRID_SIZE, GameConfig.GRID_SIZE)
 	part.Position = snappedPos
 	part.Anchored = true
 	part.Material = blockData.Material
@@ -59,14 +60,14 @@ function BuildingService.placeBlock(player: Player?, blockType: string, position
 	part.Parent = blocksFolder
 	placedBlocks[key] = part
 
-	print(string.format("[BuildingService] Placed %s at grid position %s", blockType, key))
+	print(string.format("[BuildingService] Placed %s (%s) at grid position %s", blockData.Name, partClassName, key))
 	return true
 end
 
 -- Damage or destroy a block
 function BuildingService.damageBlock(position: Vector3, damageAmount: number)
 	local key = GridUtil.toGridKey(position)
-	local part = placedBlocks[key]
+	local part = placedBlocks[key] :: BasePart?
 	if not part then return end
 
 	local currentHP = part:GetAttribute("CurrentHP") or 100
@@ -77,7 +78,7 @@ function BuildingService.damageBlock(position: Vector3, damageAmount: number)
 		print("[BuildingService] Block destroyed at key:", key)
 	else
 		part:SetAttribute("CurrentHP", currentHP)
-		-- Visual damage feedback (darken color)
+		-- Visual damage feedback
 		local ratio = math.clamp(currentHP / (part:GetAttribute("MaxHP") or 100), 0.2, 1)
 		part.Transparency = 1 - ratio * 0.8
 	end

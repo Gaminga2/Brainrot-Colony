@@ -17,9 +17,24 @@ local Categories = {
 		ID = "Blocks",
 		Name = "🧱 Blocks",
 		Items = {
-			{ ID = "WoodWall", Name = "Wood Block", Icon = "🪵", Cost = "2 Ohio Wood" },
-			{ ID = "StoneWall", Name = "Stone Block", Icon = "🪨", Cost = "3 Gyatt Granite" },
-			{ ID = "RizziteReinforcedWall", Name = "Rizzite Shield", Icon = "⚡", Cost = "4 Granite + 2 Rizzite" },
+			-- Wood Series
+			{ ID = "WoodCube1x1", Name = "Wood 1x1 Cube", Icon = "🪵", Cost = "2 Wood" },
+			{ ID = "WoodBeam1x2", Name = "Wood 1x2 Beam", Icon = "🪵", Cost = "4 Wood" },
+			{ ID = "WoodStairs", Name = "Wood Stairs", Icon = "🪜", Cost = "3 Wood" },
+			{ ID = "WoodHalfWall", Name = "Wood Half-Wall", Icon = "🪵", Cost = "1 Wood" },
+			-- Stone Series
+			{ ID = "StoneCube1x1", Name = "Stone 1x1 Cube", Icon = "🪨", Cost = "3 Granite" },
+			{ ID = "StoneBeam1x2", Name = "Stone 1x2 Beam", Icon = "🪨", Cost = "5 Granite" },
+			{ ID = "StoneSlab2x2", Name = "Stone 2x2 Slab", Icon = "🪨", Cost = "8 Granite" },
+			{ ID = "StoneStairs", Name = "Stone Stairs", Icon = "📐", Cost = "4 Granite" },
+			-- Clay Series
+			{ ID = "ClayBrick1x1", Name = "Clay Brick 1x1", Icon = "🧱", Cost = "3 Clay" },
+			{ ID = "ClayWall1x2", Name = "Clay Wall 1x2", Icon = "🧱", Cost = "5 Clay" },
+			-- Concrete Series
+			{ ID = "ConcretePillar", Name = "Concrete Pillar", Icon = "🏗️", Cost = "4 Concrete" },
+			{ ID = "ConcreteSlab", Name = "Concrete 2x2 Slab", Icon = "🏗️", Cost = "6 Concrete" },
+			-- Special Series
+			{ ID = "RizziteShield1x1", Name = "Rizzite Shield", Icon = "⚡", Cost = "4 Granite + 2 Rizzite" },
 			{ ID = "SpikeTrap", Name = "Spike Trap", Icon = "⚙️", Cost = "1 Wood + 2 Granite" },
 		},
 	},
@@ -125,8 +140,8 @@ function TopNavigationMenu.init()
 	-- Collapsible Drawer Panel below top bar
 	drawerFrame = Instance.new("Frame")
 	drawerFrame.Name = "CategoryDrawer"
-	drawerFrame.Size = UDim2.new(0, 640, 0, 0)
-	drawerFrame.Position = UDim2.new(0.5, -320, 0, 95)
+	drawerFrame.Size = UDim2.new(0, 680, 0, 0)
+	drawerFrame.Position = UDim2.new(0.5, -340, 0, 95)
 	drawerFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
 	drawerFrame.BackgroundTransparency = 0.3
 	drawerFrame.ClipsDescendants = true
@@ -143,18 +158,28 @@ function TopNavigationMenu.init()
 	drawerStroke.Thickness = 1
 	drawerStroke.Parent = drawerFrame
 
+	local scrollingFrame = Instance.new("ScrollingFrame")
+	scrollingFrame.Name = "DrawerScrollingFrame"
+	scrollingFrame.Size = UDim2.new(1, -16, 1, -16)
+	scrollingFrame.Position = UDim2.new(0, 8, 0, 8)
+	scrollingFrame.BackgroundTransparency = 1
+	scrollingFrame.ScrollBarThickness = 6
+	scrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(0, 200, 255)
+	scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+	scrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.X
+	scrollingFrame.Parent = drawerFrame
+
 	activeCategoryItemsFrame = Instance.new("Frame")
 	activeCategoryItemsFrame.Name = "ItemsContainer"
-	activeCategoryItemsFrame.Size = UDim2.new(1, -20, 1, -20)
-	activeCategoryItemsFrame.Position = UDim2.new(0, 10, 0, 10)
+	activeCategoryItemsFrame.Size = UDim2.new(1, 0, 1, 0)
 	activeCategoryItemsFrame.BackgroundTransparency = 1
-	activeCategoryItemsFrame.Parent = drawerFrame
+	activeCategoryItemsFrame.Parent = scrollingFrame
 
 	local drawerLayout = Instance.new("UIListLayout")
 	drawerLayout.FillDirection = Enum.FillDirection.Horizontal
-	drawerLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	drawerLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 	drawerLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-	drawerLayout.Padding = UDim.new(0, 10)
+	drawerLayout.Padding = UDim.new(0, 8)
 	drawerLayout.Parent = activeCategoryItemsFrame
 
 	-- Create Top Bar Category Buttons
@@ -205,7 +230,7 @@ function TopNavigationMenu.selectTab(categoryData: any)
 	if activeTab == categoryData.ID then
 		-- Toggle close drawer
 		activeTab = nil
-		TweenService:Create(drawerFrame :: Frame, TweenInfo.new(0.2), { Size = UDim2.new(0, 640, 0, 0) }):Play()
+		TweenService:Create(drawerFrame :: Frame, TweenInfo.new(0.2), { Size = UDim2.new(0, 680, 0, 0) }):Play()
 		return
 	end
 
@@ -222,7 +247,7 @@ function TopNavigationMenu.selectTab(categoryData: any)
 	for _, item in ipairs(categoryData.Items) do
 		local card = Instance.new("TextButton")
 		card.Name = "Item_" .. item.ID
-		card.Size = UDim2.new(0, 140, 0, 65)
+		card.Size = UDim2.new(0, 135, 0, 65)
 		card.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 		card.BackgroundTransparency = 0.2
 		card.Text = ""
@@ -241,7 +266,7 @@ function TopNavigationMenu.selectTab(categoryData: any)
 		local iconLabel = Instance.new("TextLabel")
 		iconLabel.Text = item.Icon or "✨"
 		iconLabel.TextSize = 22
-		iconLabel.Size = UDim2.new(1, 0, 0, 28)
+		iconLabel.Size = UDim2.new(1, 0, 0, 26)
 		iconLabel.Position = UDim2.new(0, 0, 0, 4)
 		iconLabel.BackgroundTransparency = 1
 		iconLabel.Parent = card
@@ -249,10 +274,11 @@ function TopNavigationMenu.selectTab(categoryData: any)
 		local nameLabel = Instance.new("TextLabel")
 		nameLabel.Text = item.Name
 		nameLabel.Font = Enum.Font.SourceSansBold
-		nameLabel.TextSize = 12
+		nameLabel.TextSize = 11
 		nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-		nameLabel.Size = UDim2.new(1, 0, 0, 20)
-		nameLabel.Position = UDim2.new(0, 0, 0, 32)
+		nameLabel.Size = UDim2.new(1, -6, 0, 18)
+		nameLabel.Position = UDim2.new(0, 3, 0, 28)
+		nameLabel.TextWrapped = true
 		nameLabel.BackgroundTransparency = 1
 		nameLabel.Parent = card
 
@@ -262,8 +288,8 @@ function TopNavigationMenu.selectTab(categoryData: any)
 		detailLabel.Font = Enum.Font.SourceSansItalic
 		detailLabel.TextSize = 10
 		detailLabel.TextColor3 = Color3.fromRGB(0, 220, 255)
-		detailLabel.Size = UDim2.new(1, 0, 0, 14)
-		detailLabel.Position = UDim2.new(0, 0, 0, 48)
+		detailLabel.Size = UDim2.new(1, -6, 0, 14)
+		detailLabel.Position = UDim2.new(0, 3, 0, 48)
 		detailLabel.BackgroundTransparency = 1
 		detailLabel.Parent = card
 
@@ -280,7 +306,7 @@ function TopNavigationMenu.selectTab(categoryData: any)
 	end
 
 	-- Expand drawer panel
-	TweenService:Create(drawerFrame :: Frame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 640, 0, 85) }):Play()
+	TweenService:Create(drawerFrame :: Frame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 680, 0, 85) }):Play()
 end
 
 return TopNavigationMenu
