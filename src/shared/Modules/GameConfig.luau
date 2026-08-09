@@ -34,7 +34,7 @@ GameConfig.Blocks = {
 		Name = "Dirt Block",
 		PartClass = "Part",
 		Size = Vector3.new(2, 2, 2),
-		Material = Enum.Material.Dirt,
+		Material = Enum.Material.Ground,
 		Color = Color3.fromRGB(135, 90, 50),
 		MaxHP = 30,
 		Cost = { SkibidiClay = 1 },
