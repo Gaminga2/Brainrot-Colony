@@ -43,6 +43,9 @@
 | **Sigma Concrete** | Raw Lime & Gravel | Heavy Slabs, Pillars, Foundation | Smooth reinforced grey concrete |
 | **Rizzite Alloy** | Rizzite Crystals | Shield Walls, Siege Weapons | Glowing neon cyan energy |
 
+* 📜 **Master Recipe Reference File**: See [Crafting_Recipes.md](file:///c:/Users/gamin/Downloads/Roblox/Game%20Essentials/Crafting_Recipes.md) for full recipe table formatted as `ResourceName_x(Amount)`.
+* 🛠️ **In-Game Hover Tooltips**: Hovering over any block/building card in the UI menu displays a popup tab showing exact crafting requirements (`resourcename_x(amount)`).
+
 ---
 
 ## 🧱 Basic Building Blocks Library (v0.0.0.21)

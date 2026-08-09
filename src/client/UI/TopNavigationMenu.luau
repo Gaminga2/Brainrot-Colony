@@ -2,14 +2,18 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
 
 local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
+local CraftingRecipes = require(Shared:WaitForChild("Modules"):WaitForChild("CraftingRecipes"))
 
 local TopNavigationMenu = {}
 local activeTab: string? = nil
 local drawerFrame: Frame? = nil
 local activeCategoryItemsFrame: Frame? = nil
+local tooltipFrame: Frame? = nil
+local tooltipTextLabel: TextLabel? = nil
 
 -- Category Data Definitions
 local Categories = {
@@ -18,74 +22,74 @@ local Categories = {
 		Name = "🧱 Blocks",
 		Items = {
 			-- Wood Series
-			{ ID = "WoodCube1x1", Name = "Wood 1x1 Cube", Icon = "🪵", Cost = "2 Wood" },
-			{ ID = "WoodBeam1x2", Name = "Wood 1x2 Beam", Icon = "🪵", Cost = "4 Wood" },
-			{ ID = "WoodStairs", Name = "Wood Stairs", Icon = "🪜", Cost = "3 Wood" },
-			{ ID = "WoodHalfWall", Name = "Wood Half-Wall", Icon = "🪵", Cost = "1 Wood" },
+			{ ID = "WoodCube1x1", Name = "Wood 1x1 Cube", Icon = "🪵" },
+			{ ID = "WoodBeam1x2", Name = "Wood 1x2 Beam", Icon = "🪵" },
+			{ ID = "WoodStairs", Name = "Wood Stairs", Icon = "🪜" },
+			{ ID = "WoodHalfWall", Name = "Wood Half-Wall", Icon = "🪵" },
 			-- Stone Series
-			{ ID = "StoneCube1x1", Name = "Stone 1x1 Cube", Icon = "🪨", Cost = "3 Granite" },
-			{ ID = "StoneBeam1x2", Name = "Stone 1x2 Beam", Icon = "🪨", Cost = "5 Granite" },
-			{ ID = "StoneSlab2x2", Name = "Stone 2x2 Slab", Icon = "🪨", Cost = "8 Granite" },
-			{ ID = "StoneStairs", Name = "Stone Stairs", Icon = "📐", Cost = "4 Granite" },
+			{ ID = "StoneCube1x1", Name = "Stone 1x1 Cube", Icon = "🪨" },
+			{ ID = "StoneBeam1x2", Name = "Stone 1x2 Beam", Icon = "🪨" },
+			{ ID = "StoneSlab2x2", Name = "Stone 2x2 Slab", Icon = "🪨" },
+			{ ID = "StoneStairs", Name = "Stone Stairs", Icon = "📐" },
 			-- Clay Series
-			{ ID = "ClayBrick1x1", Name = "Clay Brick 1x1", Icon = "🧱", Cost = "3 Clay" },
-			{ ID = "ClayWall1x2", Name = "Clay Wall 1x2", Icon = "🧱", Cost = "5 Clay" },
+			{ ID = "ClayBrick1x1", Name = "Clay Brick 1x1", Icon = "🧱" },
+			{ ID = "ClayWall1x2", Name = "Clay Wall 1x2", Icon = "🧱" },
 			-- Concrete Series
-			{ ID = "ConcretePillar", Name = "Concrete Pillar", Icon = "🏗️", Cost = "4 Concrete" },
-			{ ID = "ConcreteSlab", Name = "Concrete 2x2 Slab", Icon = "🏗️", Cost = "6 Concrete" },
+			{ ID = "ConcretePillar", Name = "Concrete Pillar", Icon = "🏗️" },
+			{ ID = "ConcreteSlab", Name = "Concrete 2x2 Slab", Icon = "🏗️" },
 			-- Special Series
-			{ ID = "RizziteShield1x1", Name = "Rizzite Shield", Icon = "⚡", Cost = "4 Granite + 2 Rizzite" },
-			{ ID = "SpikeTrap", Name = "Spike Trap", Icon = "⚙️", Cost = "1 Wood + 2 Granite" },
+			{ ID = "RizziteShield1x1", Name = "Rizzite Shield", Icon = "⚡" },
+			{ ID = "SpikeTrap", Name = "Spike Trap", Icon = "⚙️" },
 		},
 	},
 	{
 		ID = "Buildings",
 		Name = "🏰 Buildings",
 		Items = {
-			{ ID = "ArcherTower", Name = "Archer Post", Icon = "🏹", Cost = "15 Wood + 10 Granite" },
-			{ ID = "StorageCore", Name = "Storage Chest", Icon = "📦", Cost = "20 Wood" },
-			{ ID = "SiegeWorkshop", Name = "Catapult Workshop", Icon = "⚒️", Cost = "30 Granite + 10 Rizzite" },
-			{ ID = "CastleGate", Name = "Iron Portcullis", Icon = "🚪", Cost = "25 Granite" },
+			{ ID = "ArcherTower", Name = "Archer Post", Icon = "🏹" },
+			{ ID = "StorageCore", Name = "Storage Chest", Icon = "📦" },
+			{ ID = "SiegeWorkshop", Name = "Catapult Workshop", Icon = "⚒️" },
+			{ ID = "CastleGate", Name = "Iron Portcullis", Icon = "🚪" },
 		},
 	},
 	{
 		ID = "Clothes",
 		Name = "👕 Skins",
 		Items = {
-			{ ID = "Gigachad", Name = "Gigachad Outfit", Icon = "🗿", Type = "Skin" },
-			{ ID = "KaiCenat", Name = "Rizz Streamer Drip", Icon = "👑", Type = "Skin" },
-			{ ID = "GrimaceShake", Name = "Purple Grimace", Icon = "🥤", Type = "Skin" },
-			{ ID = "GoldenSigma", Name = "Pure Gold Armor", Icon = "✨", Type = "Skin" },
+			{ ID = "Gigachad", Name = "Gigachad Outfit", Icon = "🗿" },
+			{ ID = "KaiCenat", Name = "Rizz Streamer Drip", Icon = "👑" },
+			{ ID = "GrimaceShake", Name = "Purple Grimace", Icon = "🥤" },
+			{ ID = "GoldenSigma", Name = "Pure Gold Armor", Icon = "✨" },
 		},
 	},
 	{
 		ID = "Weapons",
 		Name = "⚔️ Weapons",
 		Items = {
-			{ ID = "RizzSword", Name = "Rizz Blade", Icon = "🗡️", Dmg = "35 Dmg" },
-			{ ID = "FanumBow", Name = "Fanum Tax Bow", Icon = "🏹", Dmg = "25 Dmg" },
-			{ ID = "OhioAxe", Name = "Ohio Battleaxe", Icon = "🪓", Dmg = "50 Dmg" },
-			{ ID = "SkibidiBomb", Name = "Kamikaze Bomb", Icon = "💣", Dmg = "200 Dmg" },
+			{ ID = "RizzSword", Name = "Rizz Blade", Icon = "🗡️" },
+			{ ID = "FanumBow", Name = "Fanum Tax Bow", Icon = "🏹" },
+			{ ID = "OhioAxe", Name = "Ohio Battleaxe", Icon = "🪓" },
+			{ ID = "SkibidiBomb", Name = "Kamikaze Bomb", Icon = "💣" },
 		},
 	},
 	{
 		ID = "Tasks",
 		Name = "📜 Tasks",
 		Items = {
-			{ ID = "ChopWood", Name = "Harvest Ohio Wood", Icon = "🪓", Target = "Trees" },
-			{ ID = "MineStone", Name = "Mine Gyatt Granite", Icon = "⛏️", Target = "Rocks" },
-			{ ID = "BuildWall", Name = "Auto-Build Castle", Icon = "🧱", Target = "Grid" },
-			{ ID = "GuardBase", Name = "Patrol Perimeter", Icon = "🛡️", Target = "Core" },
+			{ ID = "ChopWood", Name = "Harvest Ohio Wood", Icon = "🪓" },
+			{ ID = "MineStone", Name = "Mine Gyatt Granite", Icon = "⛏️" },
+			{ ID = "BuildWall", Name = "Auto-Build Castle", Icon = "🧱" },
+			{ ID = "GuardBase", Name = "Patrol Perimeter", Icon = "🛡️" },
 		},
 	},
 	{
 		ID = "Shop",
 		Name = "🛒 Shop",
 		Items = {
-			{ ID = "Blueprints", Name = "Blueprint Slots", Icon = "📜", Drip = "QoL" },
-			{ ID = "UITheme", Name = "Neon HUD Theme", Icon = "🎨", Drip = "Cosmetic" },
-			{ ID = "Soundboard", Name = "Mewing SFX Pack", Icon = "🔊", Drip = "Audio" },
-			{ ID = "PetFollower", Name = "Mini Sigma Pet", Icon = "🐾", Drip = "Pet" },
+			{ ID = "Blueprints", Name = "Blueprint Slots", Icon = "📜" },
+			{ ID = "UITheme", Name = "Neon HUD Theme", Icon = "🎨" },
+			{ ID = "Soundboard", Name = "Mewing SFX Pack", Icon = "🔊" },
+			{ ID = "PetFollower", Name = "Mini Sigma Pet", Icon = "🐾" },
 		},
 	},
 }
@@ -113,7 +117,7 @@ function TopNavigationMenu.init()
 	topBar.Size = UDim2.new(0, 680, 0, 48)
 	topBar.Position = UDim2.new(0.5, -340, 0, 40)
 	topBar.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
-	topBar.BackgroundTransparency = 0.35 -- Semi-transparent glass background
+	topBar.BackgroundTransparency = 0.35
 	topBar.BorderSizePixel = 0
 	topBar.Parent = screenGui
 
@@ -182,6 +186,40 @@ function TopNavigationMenu.init()
 	drawerLayout.Padding = UDim.new(0, 8)
 	drawerLayout.Parent = activeCategoryItemsFrame
 
+	-- Floating Hover Crafting Recipe Tooltip Tab
+	tooltipFrame = Instance.new("Frame")
+	tooltipFrame.Name = "CraftingRecipeTooltip"
+	tooltipFrame.Size = UDim2.new(0, 220, 0, 36)
+	tooltipFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+	tooltipFrame.BackgroundTransparency = 0.15
+	tooltipFrame.BorderSizePixel = 0
+	tooltipFrame.Visible = false
+	tooltipFrame.ZIndex = 200
+	tooltipFrame.Parent = screenGui
+
+	local tooltipCorner = Instance.new("UICorner")
+	tooltipCorner.CornerRadius = UDim.new(0, 6)
+	tooltipCorner.Parent = tooltipFrame
+
+	local tooltipStroke = Instance.new("UIStroke")
+	tooltipStroke.Color = Color3.fromRGB(0, 220, 255)
+	tooltipStroke.Transparency = 0.3
+	tooltipStroke.Thickness = 1.2
+	tooltipStroke.Parent = tooltipFrame
+
+	tooltipTextLabel = Instance.new("TextLabel")
+	tooltipTextLabel.Name = "RecipeLabel"
+	tooltipTextLabel.Size = UDim2.new(1, -12, 1, 0)
+	tooltipTextLabel.Position = UDim2.new(0, 6, 0, 0)
+	tooltipTextLabel.Font = Enum.Font.SourceSansBold
+	tooltipTextLabel.TextSize = 13
+	tooltipTextLabel.TextColor3 = Color3.fromRGB(0, 230, 255)
+	tooltipTextLabel.TextXAlignment = Enum.TextXAlignment.Center
+	tooltipTextLabel.TextWrapped = true
+	tooltipTextLabel.BackgroundTransparency = 1
+	tooltipTextLabel.ZIndex = 201
+	tooltipTextLabel.Parent = tooltipFrame
+
 	-- Create Top Bar Category Buttons
 	for _, catData in ipairs(Categories) do
 		local btn = Instance.new("TextButton")
@@ -223,13 +261,14 @@ function TopNavigationMenu.init()
 	end
 
 	screenGui.Parent = playerGui
-	print("[TopNavigationMenu] Loaded top glassmorphic menu bar!")
+	print("[TopNavigationMenu] Loaded top glassmorphic menu bar with recipe tooltips!")
 end
 
 function TopNavigationMenu.selectTab(categoryData: any)
 	if activeTab == categoryData.ID then
 		-- Toggle close drawer
 		activeTab = nil
+		if tooltipFrame then tooltipFrame.Visible = false end
 		TweenService:Create(drawerFrame :: Frame, TweenInfo.new(0.2), { Size = UDim2.new(0, 680, 0, 0) }):Play()
 		return
 	end
@@ -282,16 +321,33 @@ function TopNavigationMenu.selectTab(categoryData: any)
 		nameLabel.BackgroundTransparency = 1
 		nameLabel.Parent = card
 
-		local detailText = item.Cost or item.Dmg or item.Drip or item.Target or ""
+		-- Display formatted crafting recipe requirement string
+		local formattedRecipe = CraftingRecipes.getFormattedRecipe(item.ID)
 		local detailLabel = Instance.new("TextLabel")
-		detailLabel.Text = detailText
+		detailLabel.Text = formattedRecipe
 		detailLabel.Font = Enum.Font.SourceSansItalic
-		detailLabel.TextSize = 10
+		detailLabel.TextSize = 9
 		detailLabel.TextColor3 = Color3.fromRGB(0, 220, 255)
 		detailLabel.Size = UDim2.new(1, -6, 0, 14)
 		detailLabel.Position = UDim2.new(0, 3, 0, 48)
+		detailLabel.TextTruncate = Enum.TextTruncate.AtEnd
 		detailLabel.BackgroundTransparency = 1
 		detailLabel.Parent = card
+
+		-- HOVER EVENT: Show Crafting Recipe Tooltip Tab formatted as resourcename_x(amount)
+		card.MouseEnter:Connect(function()
+			if tooltipFrame and tooltipTextLabel then
+				tooltipTextLabel.Text = "🛠️ Recipe: " .. formattedRecipe
+				tooltipFrame.Position = UDim2.new(0, card.AbsolutePosition.X - 10, 0, card.AbsolutePosition.Y + card.AbsoluteSize.Y + 8)
+				tooltipFrame.Visible = true
+			end
+		end)
+
+		card.MouseLeave:Connect(function()
+			if tooltipFrame then
+				tooltipFrame.Visible = false
+			end
+		end)
 
 		card.MouseButton1Click:Connect(function()
 			print(string.format("[TopNavigationMenu] Selected item: %s (%s)", item.Name, categoryData.ID))
