@@ -9,6 +9,17 @@ GameConfig.VERSION = "v0.0.24"
 GameConfig.GRID_SIZE = 2
 GameConfig.MAX_BUILD_HEIGHT = 150
 
+-- Customizable Smooth Terrain World Generation Config
+GameConfig.TerrainConfig = {
+	WORLD_SIZE_STUDS = 160,        -- Size of island (160x160 studs)
+	STEP_STUDS = 4,                 -- Voxel step resolution
+	BASE_SURFACE_Y = 12,            -- Ground level height
+	HILL_HEIGHT = 18,               -- Max height variation for hills
+	NOISE_SCALE = 0.02,             -- Perlin noise scale (smaller = wider rolling hills)
+	SEED = 777,                     -- World seed
+	PRELOAD_TERRAIN_ON_BOOT = true, -- Auto-generate on server boot if terrain is empty
+}
+
 -- Resources (Pastel Cute Palette)
 GameConfig.Resources = {
 	OhioWood = { Name = "Ohio Wood", Color = Color3.fromRGB(220, 160, 100) },
