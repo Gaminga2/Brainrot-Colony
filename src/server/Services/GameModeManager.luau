@@ -28,7 +28,7 @@ function GameModeManager.init()
 end
 
 function GameModeManager.setGameMode(mode: string)
-	if mode == GameConfig.GameModes.SURVIVAL or mode == GameConfig.GameModes.PVP then
+	if mode == GameConfig.GameModes.SURVIVAL or mode == GameConfig.GameModes.PVP or mode == GameConfig.GameModes.CREATIVE then
 		currentMode = mode
 		print("[GameModeManager] Switched active mode to:", currentMode)
 	end
@@ -39,7 +39,7 @@ function GameModeManager.getCurrentMode(): string
 end
 
 function GameModeManager.getResources(player: Player)
-	return playerResources[player.UserId] or { OhioWood = 0, GyattGranite = 0, RizziteAlloy = 0 }
+	return playerResources[player.UserId] or { OhioWood = 9999, GyattGranite = 9999, RizziteAlloy = 9999 }
 end
 
 function GameModeManager.addResource(player: Player, resourceName: string, amount: number)
@@ -51,6 +51,11 @@ function GameModeManager.addResource(player: Player, resourceName: string, amoun
 end
 
 function GameModeManager.deductResources(player: Player, costTable: { [string]: number }): boolean
+	-- Creative mode bypasses resource deduction entirely for free sandbox building!
+	if currentMode == GameConfig.GameModes.CREATIVE then
+		return true
+	end
+
 	local res = playerResources[player.UserId]
 	if not res then return false end
 

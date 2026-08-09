@@ -8,6 +8,7 @@ local UI = script:WaitForChild("UI")
 local PlacementController = require(Controllers:WaitForChild("PlacementController"))
 local MinionCommandController = require(Controllers:WaitForChild("MinionCommandController"))
 local TopNavigationMenu = require(UI:WaitForChild("TopNavigationMenu"))
+local SettingsMenu = require(UI:WaitForChild("SettingsMenu"))
 
 print("[Client] Initializing Project Brainrot Castle...")
 
@@ -15,6 +16,7 @@ print("[Client] Initializing Project Brainrot Castle...")
 PlacementController.init()
 MinionCommandController.init()
 TopNavigationMenu.init()
+SettingsMenu.init()
 
 -- Create On-Screen HUD Guide for Controls
 local player = Players.LocalPlayer
@@ -38,7 +40,7 @@ corner.CornerRadius = UDim.new(0, 8)
 corner.Parent = frame
 
 local title = Instance.new("TextLabel")
-title.Text = "🏰 BRAINROT CASTLE (v0.0.1)"
+title.Text = "BRAINROT CASTLE"
 title.Font = Enum.Font.FredokaOne
 title.TextSize = 16
 title.TextColor3 = Color3.fromRGB(255, 215, 0)
@@ -47,9 +49,9 @@ title.BackgroundTransparency = 1
 title.Parent = frame
 
 local guideText = Instance.new("TextLabel")
-guideText.Text = "• [B] Toggle Placement Mode\n• [Left-Click] Place Voxel Block / Select Minion\n• [Right-Click] Move Selected Minion\n• [M] Spawn Mewing Mason"
+guideText.Text = "• [B] Toggle Placement Mode\n• [F2] Open Settings & Modes\n• [Left-Click] Place / Select\n• [Right-Click] Move Minion\n• [M] Spawn Minion"
 guideText.Font = Enum.Font.SourceSansBold
-guideText.TextSize = 14
+guideText.TextSize = 13
 guideText.TextColor3 = Color3.fromRGB(240, 240, 240)
 guideText.Size = UDim2.new(1, -20, 1, -40)
 guideText.Position = UDim2.new(0, 10, 0, 30)

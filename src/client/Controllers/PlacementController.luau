@@ -11,6 +11,7 @@ local Shared = ReplicatedStorage:WaitForChild("Shared")
 local GameConfig = require(Shared:WaitForChild("Modules"):WaitForChild("GameConfig"))
 local GridUtil = require(Shared:WaitForChild("Modules"):WaitForChild("GridUtil"))
 local BlockVisuals = require(Shared:WaitForChild("Modules"):WaitForChild("BlockVisuals"))
+local GameSettings = require(Shared:WaitForChild("Modules"):WaitForChild("GameSettings"))
 
 local PlacementController = {}
 local ghostPart: BasePart? = nil
@@ -82,7 +83,12 @@ function PlacementController.togglePlacementMode()
 					local blockData = GameConfig.Blocks[selectedBlockType]
 					local yOffset = blockData and blockData.Size and (blockData.Size.Y / 2) or (GameConfig.GRID_SIZE / 2)
 					local snapPos = GridUtil.snapToGrid(Mouse.Hit.Position + Vector3.new(0, yOffset, 0))
-					ghostPart.Position = snapPos
+
+					if GameSettings.get("SmoothGridSnapping") then
+						ghostPart.Position = ghostPart.Position:Lerp(snapPos, GameSettings.get("GridLerpSpeed") or 0.35)
+					else
+						ghostPart.Position = snapPos
+					end
 				end
 				task.wait(0.03)
 			end

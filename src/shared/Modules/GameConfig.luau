@@ -162,6 +162,7 @@ GameConfig.Blocks = {
 GameConfig.GameModes = {
 	SURVIVAL = "Survival",
 	PVP = "PvP",
+	CREATIVE = "Creative",
 }
 
 -- Survival Settings

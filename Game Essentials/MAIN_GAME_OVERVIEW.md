@@ -6,9 +6,17 @@
 ## 📌 Project Meta
 * **Project Name**: Brainrot Castle / Brainrot Colony
 * **Platform**: Roblox (PC, Mobile, Console)
-* **Current Working Version**: `v0.0.0.21`
-* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege
+* **Current Working Version**: `v0.0.21`
+* **Genre**: Real-Time Strategy (RTS) / Voxel Castle Builder / Tower Defense / PvP Siege / Creative Sandbox
 * **Monetization Philosophy**: **100% Fair Play / 0% P2W**. Strictly cosmetic drip (minion skins, wall themes, victory dances, audio packs) + Non-competitive Quality of Life (saved blueprints, inventory auto-stash, HUD themes).
+
+---
+
+## ⚙️ Game Settings & Creative Mode
+* 📜 **Master Settings Reference**: See [Settings.md](file:///c:/Users/gamin/Downloads/Roblox/Game%20Essentials/Settings.md) for full game modes, cheats, and grid smoothness toggles.
+* 🛠️ **In-Game Settings Popup**: Click `Settings` tab in top bar or press `[F2]` to open the modal popup window (side tabs for `Game Modes`, `Developer Cheats`, `Grid & Building`, `Audio & Visuals`).
+* 🎨 **Creative Mode**: Infinite resources, zero placement cost, and instant building sandbox for testing!
+* 📐 **Smooth Grid Lerp**: Smooth 3D vector interpolation (`ghostPart.Position:Lerp`) replaces harsh snappy jitter.
 
 ---
 
